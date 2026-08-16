@@ -156,23 +156,16 @@ def write_moments_poster(metadata: dict[str, object]) -> None:
     hero = Image.open(HERO_IMAGE_PATH).convert("RGB")
     poster = Image.new("RGB", POSTER_IMAGE_SIZE, (250, 249, 244))
     hero_panel = ImageOps.fit(hero, (1080, 500), method=Image.Resampling.LANCZOS, centering=(0.52, 0.52))
-    hero_overlay = Image.new("RGBA", hero_panel.size, (21, 30, 27, 64))
-    poster.paste(Image.alpha_composite(hero_panel.convert("RGBA"), hero_overlay).convert("RGB"), (0, 0))
+    poster.paste(hero_panel, (0, 0))
     draw = ImageDraw.Draw(poster)
     ink = (39, 47, 42)
     muted = (88, 98, 90)
-    white = (255, 255, 252)
     accent = (105, 121, 107)
-    brand_font = get_chinese_font(43)
-    english_font = get_chinese_font(25)
+    brand_font = get_chinese_font(24)
     label_font = get_chinese_font(26)
     title_font = get_chinese_font(48)
     summary_font = get_chinese_font(28)
     hint_font = get_chinese_font(25)
-
-    draw.rectangle((0, 400, 1080, 500), fill=(24, 33, 29))
-    draw.text((62, 418), "半棵斋", font=brand_font, fill=white)
-    draw.text((245, 432), "｜ Half a Tree", font=english_font, fill=(232, 231, 224))
 
     section = SECTION_NAMES[str(metadata["section"])]
     date = str(metadata["date"])
@@ -185,7 +178,8 @@ def write_moments_poster(metadata: dict[str, object]) -> None:
         draw.text((62, title_y), line, font=title_font, fill=ink)
         title_y += 64
 
-    divider_y = max(815, title_y + 18)
+    draw.text((62, title_y + 4), "半棵斋｜Half a Tree", font=brand_font, fill=accent)
+    divider_y = max(815, title_y + 48)
     draw.line((62, divider_y, 1018, divider_y), fill=(211, 210, 202), width=2)
     summary_lines = wrap_text(draw, str(metadata["summary"]), summary_font, 640, 4)
     summary_y = divider_y + 34

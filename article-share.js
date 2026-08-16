@@ -19,7 +19,7 @@
   blueskyUrl.searchParams.set("text", shareText);
   const articleSlug = new URL(pageUrl).pathname.split("/articles/").pop()?.replace(/\.html$/, "");
   const posterUrl = articleSlug
-    ? new URL(`public/media/posters/${articleSlug}.jpg`, publicSiteBase).href
+    ? new URL(`public/media/posters/${articleSlug}.jpg?v=poster-layout-v2`, publicSiteBase).href
     : null;
 
   const sharePanel = document.createElement("section");

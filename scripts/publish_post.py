@@ -20,7 +20,7 @@ SECTION_NAMES = {"essays": "文章", "arts": "艺文"}
 SHARE_IMAGE_DIR = ROOT / "public" / "media" / "share"
 SHARE_IMAGE_SIZE = (1200, 630)
 POSTER_IMAGE_DIR = ROOT / "public" / "media" / "posters"
-POSTER_IMAGE_SIZE = (1080, 1350)
+POSTER_IMAGE_SIZE = (1080, 1200)
 HERO_IMAGE_PATH = ROOT / "public" / "media" / "half-a-tree-canyon-hero.png"
 CHINESE_FONT_PATHS = (
     "/System/Library/AssetsV2/com_apple_MobileAsset_Font8/86ba2c91f017a3749571a82f2c6d890ac7ffb2fb.asset/AssetData/PingFang.ttc",
@@ -161,7 +161,6 @@ def write_moments_poster(metadata: dict[str, object]) -> None:
     draw = ImageDraw.Draw(poster)
     ink = (39, 47, 42)
     muted = (88, 98, 90)
-    paper = (250, 249, 244)
     white = (255, 255, 252)
     accent = (105, 121, 107)
     brand_font = get_chinese_font(43)
@@ -196,12 +195,9 @@ def write_moments_poster(metadata: dict[str, object]) -> None:
 
     qr = fetch_article_qr(f"{SITE_URL}articles/{metadata['slug']}.html")
     qr = qr.resize((230, 230), Image.Resampling.NEAREST)
-    poster.paste(qr, (786, 1015))
-    draw.text((62, 1090), "扫码阅读全文", font=hint_font, fill=ink)
-    draw.text((62, 1130), "或打开链接访问半棵斋", font=hint_font, fill=muted)
-    draw.text((62, 1243), "Notes from a small room", font=english_font, fill=muted)
-    draw.line((62, 1283, 1018, 1283), fill=(211, 210, 202), width=2)
-    draw.text((62, 1302), "半棵斋｜Half a Tree", font=label_font, fill=ink)
+    poster.paste(qr, (786, 930))
+    draw.text((62, 1045), "扫码阅读全文", font=hint_font, fill=ink)
+    draw.text((62, 1085), "或打开链接访问半棵斋", font=hint_font, fill=muted)
 
     poster.save(
         POSTER_IMAGE_DIR / f"{metadata['slug']}.jpg",

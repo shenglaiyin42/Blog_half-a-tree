@@ -160,6 +160,14 @@ h1 em { font-family: var(--english-font); font-weight: 500; letter-spacing: .01e
 .share-button { display: inline-flex; align-items: center; min-height: 32px; box-sizing: border-box; border: 1px solid var(--line); padding: 6px 10px; color: var(--moss-deep); background: transparent; font: 600 12px/1 var(--english-font); letter-spacing: .035em; text-decoration: none; transition: color .16s, border-color .16s, background .16s; }
 .share-button:hover { border-color: var(--moss); color: var(--ink); background: rgba(85,112,96,.07); }
 .share-status { min-height: 1.4em; margin: 9px 0 0; color: var(--muted); font-size: 12px; }
+.moments-poster-dialog { position: fixed; z-index: 20; inset: 0; display: grid; place-items: center; padding: 22px; }
+.moments-poster-backdrop { position: absolute; inset: 0; background: rgba(21, 27, 23, .58); }
+.moments-poster-panel { position: relative; z-index: 1; width: min(100%, 430px); max-height: calc(100vh - 44px); overflow: auto; box-sizing: border-box; padding: 20px; background: var(--paper); box-shadow: 0 20px 70px rgba(0,0,0,.28); }
+.moments-poster-panel .share-label { padding-right: 30px; }
+.moments-poster-panel img { display: block; width: 100%; height: auto; border: 1px solid var(--line); }
+.moments-poster-panel > p:not(.share-label) { margin: 13px 0 0; color: var(--muted); font-size: 13px; line-height: 1.55; }
+.moments-poster-actions { display: flex; flex-wrap: wrap; gap: 7px; margin-top: 13px; }
+.moments-poster-close { position: absolute; top: 10px; right: 12px; border: 0; padding: 3px 7px; color: var(--muted); background: transparent; font-size: 26px; line-height: 1; cursor: pointer; }
 
 .card-page { min-height: 100vh; display: grid; place-items: center; background: #e9e7df; }
 .share-card-shell { width: min(100% - 34px, 660px); padding: 28px 0; }

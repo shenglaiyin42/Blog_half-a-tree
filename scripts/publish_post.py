@@ -6,7 +6,10 @@ from __future__ import annotations
 import argparse
 import html
 import re
+from io import BytesIO
 from pathlib import Path
+from urllib.parse import urlencode
+from urllib.request import urlopen
 
 from PIL import Image, ImageDraw, ImageFont, ImageOps
 
@@ -16,6 +19,9 @@ SITE_URL = "https://shenglaiyin42.github.io/Blog_half-a-tree/"
 SECTION_NAMES = {"essays": "文章", "arts": "艺文"}
 SHARE_IMAGE_DIR = ROOT / "public" / "media" / "share"
 SHARE_IMAGE_SIZE = (1200, 630)
+POSTER_IMAGE_DIR = ROOT / "public" / "media" / "posters"
+POSTER_IMAGE_SIZE = (1080, 1350)
+HERO_IMAGE_PATH = ROOT / "public" / "media" / "half-a-tree-canyon-hero.png"
 CHINESE_FONT_PATHS = (
     "/System/Library/AssetsV2/com_apple_MobileAsset_Font8/86ba2c91f017a3749571a82f2c6d890ac7ffb2fb.asset/AssetData/PingFang.ttc",
     "/Library/Fonts/Arial Unicode.ttf",
@@ -98,7 +104,7 @@ def share_image_url(metadata: dict[str, object]) -> str:
 def write_share_card(metadata: dict[str, object]) -> None:
     """Create a standard 1200 × 630 social-preview JPEG for one article."""
     SHARE_IMAGE_DIR.mkdir(parents=True, exist_ok=True)
-    hero = Image.open(ROOT / "public" / "media" / "half-a-tree-canyon-hero.png").convert("RGB")
+    hero = Image.open(HERO_IMAGE_PATH).convert("RGB")
     card = ImageOps.fit(hero, SHARE_IMAGE_SIZE, method=Image.Resampling.LANCZOS, centering=(0.52, 0.52)).convert("RGBA")
     card.alpha_composite(Image.new("RGBA", SHARE_IMAGE_SIZE, (24, 34, 29, 66)))
 
@@ -133,6 +139,74 @@ def write_share_card(metadata: dict[str, object]) -> None:
         SHARE_IMAGE_DIR / f"{metadata['slug']}.jpg",
         format="JPEG",
         quality=90,
+        optimize=True,
+        progressive=True,
+    )
+
+
+def fetch_article_qr(url: str) -> Image.Image:
+    query = urlencode({"size": "520x520", "format": "png", "data": url})
+    with urlopen(f"https://api.qrserver.com/v1/create-qr-code/?{query}", timeout=30) as response:
+        return Image.open(BytesIO(response.read())).convert("RGB")
+
+
+def write_moments_poster(metadata: dict[str, object]) -> None:
+    """Create the vertical, QR-enabled image used for WeChat Moments sharing."""
+    POSTER_IMAGE_DIR.mkdir(parents=True, exist_ok=True)
+    hero = Image.open(HERO_IMAGE_PATH).convert("RGB")
+    poster = Image.new("RGB", POSTER_IMAGE_SIZE, (250, 249, 244))
+    hero_panel = ImageOps.fit(hero, (1080, 500), method=Image.Resampling.LANCZOS, centering=(0.52, 0.52))
+    hero_overlay = Image.new("RGBA", hero_panel.size, (21, 30, 27, 64))
+    poster.paste(Image.alpha_composite(hero_panel.convert("RGBA"), hero_overlay).convert("RGB"), (0, 0))
+    draw = ImageDraw.Draw(poster)
+    ink = (39, 47, 42)
+    muted = (88, 98, 90)
+    paper = (250, 249, 244)
+    white = (255, 255, 252)
+    accent = (105, 121, 107)
+    brand_font = get_chinese_font(43)
+    english_font = get_chinese_font(25)
+    label_font = get_chinese_font(26)
+    title_font = get_chinese_font(48)
+    summary_font = get_chinese_font(28)
+    hint_font = get_chinese_font(25)
+
+    draw.rectangle((0, 400, 1080, 500), fill=(24, 33, 29))
+    draw.text((62, 418), "半棵斋", font=brand_font, fill=white)
+    draw.text((245, 432), "｜ Half a Tree", font=english_font, fill=(232, 231, 224))
+
+    section = SECTION_NAMES[str(metadata["section"])]
+    date = str(metadata["date"])
+    year, month, day = date.split("-")
+    draw.text((62, 558), f"{section}  ·  {year}年{int(month)}月{int(day)}日", font=label_font, fill=accent)
+
+    title_lines = wrap_text(draw, str(metadata["title"]), title_font, 935, 3)
+    title_y = 610
+    for line in title_lines:
+        draw.text((62, title_y), line, font=title_font, fill=ink)
+        title_y += 64
+
+    divider_y = max(815, title_y + 18)
+    draw.line((62, divider_y, 1018, divider_y), fill=(211, 210, 202), width=2)
+    summary_lines = wrap_text(draw, str(metadata["summary"]), summary_font, 640, 4)
+    summary_y = divider_y + 34
+    for line in summary_lines:
+        draw.text((62, summary_y), line, font=summary_font, fill=muted)
+        summary_y += 43
+
+    qr = fetch_article_qr(f"{SITE_URL}articles/{metadata['slug']}.html")
+    qr = qr.resize((230, 230), Image.Resampling.NEAREST)
+    poster.paste(qr, (786, 1015))
+    draw.text((62, 1090), "扫码阅读全文", font=hint_font, fill=ink)
+    draw.text((62, 1130), "或打开链接访问半棵斋", font=hint_font, fill=muted)
+    draw.text((62, 1243), "Notes from a small room", font=english_font, fill=muted)
+    draw.line((62, 1283, 1018, 1283), fill=(211, 210, 202), width=2)
+    draw.text((62, 1302), "半棵斋｜Half a Tree", font=label_font, fill=ink)
+
+    poster.save(
+        POSTER_IMAGE_DIR / f"{metadata['slug']}.jpg",
+        format="JPEG",
+        quality=92,
         optimize=True,
         progressive=True,
     )
@@ -266,6 +340,7 @@ def main() -> None:
     args = parser.parse_args()
     metadata, markdown = read_post(args.post)
     write_share_card(metadata)
+    write_moments_poster(metadata)
     if args.refresh_share:
         refresh_share_metadata(metadata)
         return

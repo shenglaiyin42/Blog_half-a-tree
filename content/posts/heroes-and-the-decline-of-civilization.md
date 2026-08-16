@@ -1,5 +1,5 @@
 ---
-title: 所谓英雄，或许正是文明衰落的开始——《奥德赛》
+title: 所谓英雄，或许正是文明衰落的开始-《奥德赛》
 slug: heroes-and-the-decline-of-civilization
 section: arts
 date: 2026-08-16

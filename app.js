@@ -4,7 +4,7 @@ const posts = [
     url: "./articles/heroes-and-the-decline-of-civilization.html",
     section: "arts",
     sectionName: "艺文",
-    title: "所谓英雄，或许正是文明衰落的开始——《奥德赛》",
+    title: "所谓英雄，或许正是文明衰落的开始-《奥德赛》",
     excerpt: "诺兰的《奥德赛》不只是一个英雄历经艰险、终于回家的故事。它更像是一个关于文明衰落的寓言：当人与人之间最基本的原则被不断打破，暴力又以英雄之名被传颂，毁灭最终也会被下一代继承。",
     date: "2026-08-16",
     tags: ["电影"],

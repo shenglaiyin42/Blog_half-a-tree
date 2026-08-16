@@ -5,8 +5,8 @@ title: ""
 # 可选：留空即可；发布时会自动生成英文网址名。
 slug: ""
 
-# 必填：四选一。
-# essays = 文章；arts = 艺文；thoughts = 想法；rants = 吐槽
+# 必填：二选一。
+# essays = 文章；arts = 艺文
 section: "essays"
 
 # 必填：发布日期，格式必须为 YYYY-MM-DD。

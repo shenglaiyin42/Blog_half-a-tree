@@ -1,7 +1,7 @@
 const posts = [
   {
     id: "a-suffocating-self-exoneration",
-    url: "./articles/a-suffocating-self-exoneration/",
+    url: "./articles/a-suffocating-self-exoneration.html",
     section: "arts",
     sectionName: "艺文",
     title: "一场让人愤怒且窒息的“自我洗白”-《万物只是自然生长》》",

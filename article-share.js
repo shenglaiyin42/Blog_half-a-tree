@@ -27,7 +27,6 @@
       <button class="share-button" type="button" data-share="copy">Copy Link</button>
       <a class="share-button" href="${xUrl.href}" target="_blank" rel="noopener noreferrer">Twitter</a>
       <a class="share-button" href="${blueskyUrl.href}" target="_blank" rel="noopener noreferrer">Bluesky</a>
-      <button class="share-button" type="button" data-share="substack">Substack</button>
       <button class="share-button" type="button" data-share="wechat">微信朋友圈</button>
     </div>
     <p class="share-status" aria-live="polite"></p>`;
@@ -66,9 +65,5 @@
     const action = event.target.closest("[data-share]")?.dataset.share;
     if (action === "copy") copy(pageUrl, "链接已复制。");
     if (action === "wechat") copy(pageUrl, "链接已复制；请打开微信，在朋友圈粘贴分享。");
-    if (action === "substack") {
-      copy(shareText, "标题、摘要和链接已复制；请在 Substack 编辑器中粘贴。");
-      window.open("https://substack.com/publish/post", "_blank", "noopener,noreferrer");
-    }
   });
 })();

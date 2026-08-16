@@ -1,4 +1,15 @@
-const posts = [];
+const posts = [
+  {
+    id: "a-suffocating-self-exoneration",
+    url: "./articles/a-suffocating-self-exoneration/",
+    section: "arts",
+    sectionName: "艺文 · 译文",
+    title: "一场让人愤怒且窒息的“自我洗白”——《万物只是自然生长》",
+    excerpt: "读李翊云《万物只是自然生长》后，对“激进接纳”与自我反思的一次尖锐质疑。",
+    date: "2026-08-15",
+    tags: ["读书"],
+  },
+];
 
 const sectionLabels = {
   thoughts: { zh: "想法", en: "THOUGHTS" },
@@ -10,6 +21,11 @@ const sectionLabels = {
 let selectedSection = "essays";
 let selectedTopic = null;
 let selectedArchive = null;
+
+const requestedSection = new URLSearchParams(window.location.search).get("section");
+if (requestedSection && sectionLabels[requestedSection]) {
+  selectedSection = requestedSection;
+}
 
 const postList = document.querySelector("#post-list");
 const topicList = document.querySelector("#topic-list");
@@ -81,7 +97,7 @@ function renderPosts() {
   postList.innerHTML = activePosts.length ? activePosts.map((post) => `
     <article class="post-card">
       <div class="post-meta"><span class="post-section">${post.sectionName}</span><time datetime="${post.date}">${formatDate(post.date)}</time></div>
-      <h3><button type="button" data-post="${post.id}">${post.title}</button></h3>
+      <h3><a href="${post.url}">${post.title}</a></h3>
       <p class="excerpt">${post.excerpt}</p>
       <div class="post-tags">${post.tags.map((tag) => `<button type="button" class="post-tag" data-topic="${tag}">#${tag}</button>`).join("")}</div>
     </article>`).join("") : `<p class="empty-state">文章将在这里出现。</p>`;

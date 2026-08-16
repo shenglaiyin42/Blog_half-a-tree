@@ -147,7 +147,6 @@ h1 em { font-family: var(--english-font); font-weight: 500; letter-spacing: .01e
 .article-meta { display: flex; flex-wrap: wrap; gap: 8px 12px; margin: 0 0 14px; color: var(--muted); font-size: 13px; }
 .article-meta .post-section { color: var(--clay); }
 .article-title { margin: 0; font-size: clamp(31px, 4vw, 46px); font-weight: 500; line-height: 1.35; }
-.article-summary { max-width: 650px; margin: 18px 0 0; color: var(--muted); font-size: 16px; line-height: 1.8; }
 .article-tags { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 19px; }
 .article-tags span { color: var(--moss); font: 14px/1 var(--english-font); }
 .article-body { padding-top: 38px; color: #383c37; font-size: 17px; line-height: 2; }

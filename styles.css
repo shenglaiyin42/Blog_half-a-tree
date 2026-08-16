@@ -193,12 +193,12 @@ h1 em { font-family: var(--english-font); font-weight: 500; letter-spacing: .01e
   .rss-link { padding-right: 15px; }
   .rss-link span { display: none; }
   .nav-link { padding: 0 14px; white-space: nowrap; font-size: 13px; }
-  .content-layout { display: block; padding-top: 22px; }
-  .sidebar { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; border-right: 0; padding: 0 0 30px; border-bottom: 1px solid var(--line); }
+  .content-layout { display: flex; flex-direction: column; padding-top: 22px; }
+  .sidebar { order: 2; display: grid; grid-template-columns: 1fr 1fr; gap: 20px; border-right: 0; padding: 30px 0 0; border-top: 1px solid var(--line); }
   .sidebar-section + .sidebar-section { margin-top: 0; }
   .archives-section { min-width: 0; }
   .filter-link { padding-left: 2px; }
-  .reading-area { padding-top: 34px; }
+  .reading-area { order: 1; padding-top: 0; }
   .post-card h3 { font-size: 21px; }
   .site-footer { gap: 18px; }
   .article-shell { width: min(100% - 34px, 780px); padding-top: 34px; }

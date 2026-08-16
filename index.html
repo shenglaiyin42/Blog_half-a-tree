@@ -53,15 +53,15 @@
           <div class="archive-list" id="archive-list"></div>
         </section>
 
-        <section class="sidebar-section site-card-section" aria-label="网站名片下载">
-          <a class="site-card-download" href="./card/half-a-tree-site-card.jpg?v=20260816-300dpi" download="half-a-tree-site-card.jpg">
+        <section class="sidebar-section site-card-section" aria-label="分享网站名片">
+          <button class="site-card-download" id="site-card-share" type="button" aria-describedby="site-card-share-status">
             <img src="https://api.qrserver.com/v1/create-qr-code/?size=180x180&amp;format=png&amp;data=https%3A%2F%2Fshenglaiyin42.github.io%2FBlog_half-a-tree%2F" alt="扫描二维码访问半棵斋" />
             <span class="site-card-copy">
               <strong>网站名片</strong>
               <em>Site Card</em>
-              <small>点击下载并分享</small>
+              <small id="site-card-share-status">点击分享名片</small>
             </span>
-          </a>
+          </button>
         </section>
       </aside>
 
@@ -83,5 +83,6 @@
     </footer>
 
     <script src="./app.js?v=article-file-route-v1"></script>
+    <script src="./site-card-share.js?v=site-card-share-v1"></script>
   </body>
 </html>

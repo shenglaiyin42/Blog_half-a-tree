@@ -12,8 +12,6 @@ const posts = [
 ];
 
 const sectionLabels = {
-  thoughts: { zh: "想法", en: "THOUGHTS" },
-  rants: { zh: "吐槽", en: "RANTS" },
   essays: { zh: "文章", en: "ESSAYS" },
   arts: { zh: "艺文", en: "ARTS & CULTURE" },
 };

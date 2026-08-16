@@ -5,7 +5,7 @@
 ## 必填信息
 
 - `title`：文章标题。
-- `section`：`essays`（文章）、`arts`（艺文）、`thoughts`（想法）或 `rants`（吐槽）。
+- `section`：`essays`（文章）或 `arts`（艺文）。
 - `date`：`YYYY-MM-DD` 格式的发布日期。
 - `summary`：约 100 字的列表页摘要。
 - `tags`：标签名称列表；不写 `#`。

@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="半棵斋｜Half a Tree — Notes from a small room"
+    />
+    <title>半棵斋｜Half a Tree</title>
+    <link rel="alternate" type="application/rss+xml" title="半棵斋 RSS" href="./rss.xml" />
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <header class="site-header">
+      <div class="hero" role="img" aria-label="峡谷、远山与河流"></div>
+
+      <div class="identity wrap">
+        <p class="eyebrow">A personal blog</p>
+        <h1><a class="site-title" href="./" aria-label="返回首页：半棵斋 Half a Tree">半棵斋 <span>｜</span> <em>Half a Tree</em></a></h1>
+        <p class="motto">Sustainable development cannot save us. Sustainable retreat, maybe.</p>
+      </div>
+
+      <div class="nav-shell">
+        <nav class="wrap site-nav" aria-label="主导航">
+          <a class="rss-link" href="./rss.xml" title="订阅 RSS" aria-label="订阅 RSS">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="6" cy="18" r="2.1"></circle><path d="M4 10.1a9.9 9.9 0 0 1 9.9 9.9M4 4a16 16 0 0 1 16 16"></path></svg>
+            <span>RSS / 订阅</span>
+          </a>
+          <div class="nav-pages">
+            <button class="nav-link is-active" data-section="essays">文章 <span>/ Essays</span></button>
+            <button class="nav-link" data-section="arts">艺文 <span>/ Arts &amp; Culture</span></button>
+            <button class="nav-link" data-section="thoughts">想法 <span>/ Thoughts</span></button>
+            <button class="nav-link" data-section="rants">吐槽 <span>/ Rants</span></button>
+          </div>
+        </nav>
+      </div>
+    </header>
+
+    <main class="wrap content-layout">
+      <aside class="sidebar" aria-label="文章筛选">
+        <section class="sidebar-section">
+          <div class="section-heading">
+            <p>Hashtags</p>
+            <span>Topics</span>
+          </div>
+          <div class="topic-list" id="topic-list"></div>
+        </section>
+
+        <section class="sidebar-section archives-section">
+          <div class="section-heading">
+            <p>Archives</p>
+            <span>归档</span>
+          </div>
+          <div class="archive-list" id="archive-list"></div>
+        </section>
+      </aside>
+
+      <section class="reading-area" aria-live="polite">
+        <div class="result-heading">
+          <div>
+            <p class="result-kicker" id="result-kicker">THOUGHTS</p>
+            <h2 id="result-title">想法</h2>
+          </div>
+          <button class="clear-filter" id="clear-filter" type="button" hidden>清除筛选</button>
+        </div>
+        <div class="post-list" id="post-list"></div>
+      </section>
+    </main>
+
+    <footer class="site-footer wrap">
+      <p>半棵斋｜Half a Tree</p>
+      <p>Notes from a small room</p>
+    </footer>
+
+    <script src="./app.js"></script>
+  </body>
+</html>

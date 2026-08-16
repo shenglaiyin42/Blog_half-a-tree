@@ -152,6 +152,12 @@ h1 em { font-family: var(--english-font); font-weight: 500; letter-spacing: .01e
 .article-body { padding-top: 30px; color: #383c37; font-size: 17px; line-height: 1.78; }
 .article-body p { margin-bottom: 1.25em; }
 .article-body blockquote { margin: 1.8em 0; padding: 4px 0 4px 22px; border-left: 2px solid var(--clay); color: #555d54; }
+.article-share { margin-top: 30px; padding: 18px 0 5px; border-top: 1px solid var(--line); }
+.share-label { margin: 0 0 10px; color: var(--moss); font: 600 11px/1 var(--english-font); letter-spacing: .16em; }
+.share-actions { display: flex; flex-wrap: wrap; gap: 7px; }
+.share-button { display: inline-flex; align-items: center; min-height: 32px; box-sizing: border-box; border: 1px solid var(--line); padding: 6px 10px; color: var(--moss-deep); background: transparent; font: 600 12px/1 var(--english-font); letter-spacing: .035em; text-decoration: none; transition: color .16s, border-color .16s, background .16s; }
+.share-button:hover { border-color: var(--moss); color: var(--ink); background: rgba(85,112,96,.07); }
+.share-status { min-height: 1.4em; margin: 9px 0 0; color: var(--muted); font-size: 12px; }
 
 
 @media (max-width: 720px) {

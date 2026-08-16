@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="{{ARTICLE_SUMMARY}}" />
+    <title>{{ARTICLE_TITLE}}｜半棵斋</title>
+    <link rel="alternate" type="application/rss+xml" title="半棵斋 RSS" href="../rss.xml" />
+    <link rel="stylesheet" href="../styles.css" />
+  </head>
+  <body>
+    <header class="site-header">
+      <div class="hero" role="img" aria-label="峡谷、远山与河流"></div>
+      <div class="identity wrap">
+        <p class="eyebrow">A personal blog</p>
+        <h1><a class="site-title" href="../" aria-label="返回首页：半棵斋 Half a Tree">半棵斋 <span>｜</span> <em>Half a Tree</em></a></h1>
+        <p class="motto">Sustainable development cannot save us. Sustainable retreat, maybe.</p>
+      </div>
+      <div class="nav-shell">
+        <nav class="wrap site-nav" aria-label="主导航">
+          <a class="rss-link" href="../rss.xml" title="订阅 RSS" aria-label="订阅 RSS"><span>RSS / 订阅</span></a>
+          <div class="nav-pages">
+            <a class="nav-link" href="../?section=essays">文章 <span>/ Essays</span></a>
+            <a class="nav-link" href="../?section=arts">艺文 <span>/ Arts &amp; Culture</span></a>
+            <a class="nav-link" href="../?section=thoughts">想法 <span>/ Thoughts</span></a>
+            <a class="nav-link" href="../?section=rants">吐槽 <span>/ Rants</span></a>
+          </div>
+        </nav>
+      </div>
+    </header>
+
+    <main class="article-shell">
+      <a class="article-back" href="../?section={{SECTION_ID}}">← 返回{{SECTION_NAME}}</a>
+      <article>
+        <header class="article-header">
+          <p class="article-meta"><span class="post-section">{{SECTION_NAME}}</span><time datetime="{{DATE_ISO}}">{{DATE_DISPLAY}}</time></p>
+          <h2 class="article-title">{{ARTICLE_TITLE}}</h2>
+          <div class="article-tags" aria-label="标签">{{ARTICLE_TAGS}}</div>
+        </header>
+        <div class="article-body">
+          {{ARTICLE_BODY}}
+        </div>
+      </article>
+    </main>
+
+    <footer class="site-footer wrap">
+      <p>半棵斋｜Half a Tree</p>
+      <p>Notes from a small room</p>
+    </footer>
+    <script src="../article-share.js"></script>
+  </body>
+</html>

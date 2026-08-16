@@ -14,7 +14,7 @@ const posts = [
     url: "./articles/a-suffocating-self-exoneration.html",
     section: "arts",
     sectionName: "艺文",
-    title: "一场让人愤怒且窒息的“自我洗白”-《万物只是自然生长》》",
+    title: "一场让人愤怒且窒息的“自我洗白”-《万物只是自然生长》",
     excerpt: "读李翊云的《万物只是自然生长》，我的心情从一开始的不安，到最后变成了极度的反感和恶心。作为一个母亲，两个孩子相继选择相同的方式自杀，这难道不是家庭出了大问题吗？可身为作家的母亲在书里仅仅反思了她自己的",
     date: "2026-08-15",
     tags: ["读书"],

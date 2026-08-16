@@ -3,7 +3,7 @@ const posts = [
     id: "a-suffocating-self-exoneration",
     url: "./articles/a-suffocating-self-exoneration/",
     section: "arts",
-    sectionName: "艺文 · 译文",
+    sectionName: "艺文",
     title: "一场让人愤怒且窒息的“自我洗白”-《万物只是自然生长》》",
     excerpt: "读李翊云的《万物只是自然生长》，我的心情从一开始的不安，到最后变成了极度的反感和恶心。",
     date: "2026-08-15",

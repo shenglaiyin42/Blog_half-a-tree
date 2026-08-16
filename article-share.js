@@ -6,11 +6,15 @@
 
   if (!article || !articleBody || !title || document.querySelector(".article-share")) return;
 
-  const pageUrl = window.location.href;
+  const canonicalUrl = document.querySelector('link[rel="canonical"]')?.href;
+  const publicSiteBase = "https://shenglaiyin42.github.io/Blog_half-a-tree/";
+  const localArticlePath = window.location.pathname.split("/articles/")[1];
+  const pageUrl = canonicalUrl || (localArticlePath
+    ? new URL(`articles/${localArticlePath}`, publicSiteBase).href
+    : window.location.href);
   const shareText = [title, summary, pageUrl].filter(Boolean).join("\n");
-  const xUrl = new URL("https://twitter.com/intent/tweet");
-  xUrl.searchParams.set("text", `${title}\n${summary}`.trim());
-  xUrl.searchParams.set("url", pageUrl);
+  const xUrl = new URL("https://x.com/intent/post");
+  xUrl.searchParams.set("text", shareText);
   const blueskyUrl = new URL("https://bsky.app/intent/compose");
   blueskyUrl.searchParams.set("text", shareText);
 
@@ -31,23 +35,29 @@
 
   const status = sharePanel.querySelector(".share-status");
   async function copy(value, message) {
-    try {
-      if (navigator.clipboard?.writeText) {
+    let copied = false;
+    if (navigator.clipboard?.writeText) {
+      try {
         await navigator.clipboard.writeText(value);
-      } else {
-        const helper = document.createElement("textarea");
-        helper.value = value;
-        helper.setAttribute("readonly", "");
-        helper.style.position = "fixed";
-        helper.style.opacity = "0";
-        document.body.append(helper);
-        helper.select();
-        const copied = document.execCommand("copy");
-        helper.remove();
-        if (!copied) throw new Error("Copy unavailable");
+        copied = true;
+      } catch {
+        copied = false;
       }
+    }
+    if (!copied) {
+      const helper = document.createElement("textarea");
+      helper.value = value;
+      helper.setAttribute("readonly", "");
+      helper.style.position = "fixed";
+      helper.style.opacity = "0";
+      document.body.append(helper);
+      helper.select();
+      copied = document.execCommand("copy");
+      helper.remove();
+    }
+    if (copied) {
       status.textContent = message;
-    } catch {
+    } else {
       status.textContent = "复制失败，请手动复制浏览器地址。";
     }
   }

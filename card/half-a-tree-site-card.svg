@@ -1,0 +1,29 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="675" viewBox="0 0 1200 675" role="img" aria-labelledby="title description">
+  <title id="title">半棵斋｜Half a Tree</title>
+  <desc id="description">半棵斋个人博客网站名片</desc>
+  <defs>
+    <linearGradient id="sky" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#eef0e8"/>
+      <stop offset="1" stop-color="#c9d0cb"/>
+    </linearGradient>
+    <linearGradient id="mountain" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#738476"/>
+      <stop offset="1" stop-color="#31493e"/>
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="675" fill="#fbfaf6"/>
+  <rect x="0" y="0" width="1200" height="248" fill="url(#sky)"/>
+  <path d="M0 248 L0 195 L175 105 L328 206 L505 84 L704 205 L882 102 L1200 210 L1200 248 Z" fill="#91a196" opacity=".7"/>
+  <path d="M0 248 L0 222 L204 147 L390 268 L618 141 L795 257 L1010 135 L1200 228 L1200 320 L0 320 Z" fill="url(#mountain)"/>
+  <rect x="74" y="322" width="1052" height="1" fill="#d5d4cd"/>
+  <text x="74" y="397" fill="#26372f" font-family="PingFang SC, Microsoft YaHei, Noto Sans SC, sans-serif" font-size="63" font-weight="500">半棵斋</text>
+  <text x="300" y="397" fill="#a6a394" font-family="Georgia, serif" font-size="48">｜</text>
+  <text x="349" y="396" fill="#26372f" font-family="Georgia, serif" font-size="61" font-style="italic">Half a Tree</text>
+  <text x="77" y="440" fill="#526155" font-family="Georgia, serif" font-size="24" font-style="italic">Notes from a small room</text>
+  <text x="77" y="496" fill="#526155" font-family="Georgia, serif" font-size="20" font-style="italic">Sustainable development cannot save us. Sustainable retreat, maybe.</text>
+  <rect x="74" y="546" width="1052" height="1" fill="#d5d4cd"/>
+  <text x="77" y="596" fill="#526155" font-family="Georgia, serif" font-size="19" letter-spacing="1">VISIT / 访问博客</text>
+  <text x="77" y="630" fill="#26372f" font-family="Georgia, serif" font-size="23">shenglaiyin42.github.io/Blog_half-a-tree</text>
+  <rect x="935" y="463" width="154" height="154" rx="3" fill="#fff"/>
+  <image x="943" y="471" width="138" height="138" href="https://api.qrserver.com/v1/create-qr-code/?size=180x180&amp;format=png&amp;data=https%3A%2F%2Fshenglaiyin42.github.io%2FBlog_half-a-tree%2F"/>
+</svg>

@@ -83,6 +83,8 @@ h1 em { font-family: var(--english-font); font-weight: 500; letter-spacing: .01e
 .rss-link svg { width: 17px; fill: var(--clay); stroke: var(--clay); stroke-width: 2.2; }
 .nav-pages { display: flex; align-items: stretch; }
 .nav-link {
+  display: inline-flex;
+  align-items: center;
   border: 0;
   border-bottom: 2px solid transparent;
   padding: 0 25px;

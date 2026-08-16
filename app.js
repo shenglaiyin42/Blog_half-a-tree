@@ -49,7 +49,8 @@ function archiveLabel(key) {
 
 function filteredPosts() {
   return posts.filter((post) => {
-    const sectionMatches = post.section === selectedSection;
+    const isGlobalFilter = selectedTopic || selectedArchive;
+    const sectionMatches = isGlobalFilter || post.section === selectedSection;
     const topicMatches = !selectedTopic || post.tags.includes(selectedTopic);
     const archiveMatches = !selectedArchive || archiveKey(post.date) === selectedArchive;
     return sectionMatches && topicMatches && archiveMatches;
@@ -90,9 +91,16 @@ function renderArchives() {
 function renderPosts() {
   const activePosts = filteredPosts();
   const section = sectionLabels[selectedSection];
-  const extra = selectedTopic ? ` · #${selectedTopic}` : selectedArchive ? ` · ${archiveLabel(selectedArchive)}` : "";
-  resultTitle.textContent = `${section.zh}${extra}`;
-  resultKicker.textContent = section.en;
+  if (selectedTopic) {
+    resultTitle.textContent = `标签 · #${selectedTopic}`;
+    resultKicker.textContent = "topic";
+  } else if (selectedArchive) {
+    resultTitle.textContent = `归档 · ${archiveLabel(selectedArchive)}`;
+    resultKicker.textContent = "archive";
+  } else {
+    resultTitle.textContent = section.zh;
+    resultKicker.textContent = section.en;
+  }
   clearFilter.hidden = !selectedTopic && !selectedArchive;
   postList.innerHTML = activePosts.length ? activePosts.map((post) => `
     <article class="post-card">

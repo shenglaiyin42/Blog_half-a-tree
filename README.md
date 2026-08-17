@@ -2,7 +2,7 @@
 
 这是“半棵斋｜Half a Tree”的静态个人博客仓库。
 
-正式网站：[半棵斋](https://shenglaiyin42.github.io/Blog_half-a-tree/)
+正式网站：[半棵斋](https://halfatree.page/)
 
 ## 仓库内容
 

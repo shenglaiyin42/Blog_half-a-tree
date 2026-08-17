@@ -15,7 +15,8 @@ from PIL import Image, ImageDraw, ImageFont, ImageOps
 
 
 ROOT = Path(__file__).resolve().parents[1]
-SITE_URL = "https://shenglaiyin42.github.io/Blog_half-a-tree/"
+SITE_URL = "https://halfatree.page/"
+PUBLIC_ASSET_VERSION = "halfatree-page-v1"
 SECTION_NAMES = {"essays": "文章", "arts": "艺文"}
 SHARE_IMAGE_DIR = ROOT / "public" / "media" / "share"
 SHARE_IMAGE_SIZE = (1200, 630)
@@ -98,7 +99,7 @@ def wrap_text(draw: ImageDraw.ImageDraw, text: str, font: ImageFont.ImageFont, w
 
 
 def share_image_url(metadata: dict[str, object]) -> str:
-    return f"{SITE_URL}public/media/share/{metadata['slug']}.jpg"
+    return f"{SITE_URL}public/media/share/{metadata['slug']}.jpg?v={PUBLIC_ASSET_VERSION}"
 
 
 def write_share_card(metadata: dict[str, object]) -> None:

@@ -7,7 +7,6 @@ const posts = [
     title: "在百万年的时间面前",
     excerpt: "我们眼前看到的地质现象，动辄以百万年为时间单位；人的一生最多不过百年，而许多烦恼甚至只持续几小时。这跟大自然比起来，真的不值一提。",
     date: "2026-08-17",
-    updated: "2026-08-17",
     tags: ["随想"],
   },
   {
@@ -18,7 +17,6 @@ const posts = [
     title: "你爱咋咋地，我也没辙——宋冬野《再想想》",
     excerpt: "宋冬野终于从《安和桥北》时期那个忧郁的文艺青年，走向了对人生和人生态度的讨论。《再想想》里有一种无可奈何，也有一种隐隐约约的不甘：你爱咋咋地吧，我也没辙，但是我心里还是想跟你说一句，滚蛋。",
     date: "2026-08-17",
-    updated: "2026-08-17",
     tags: ["音乐"],
   },
   {
@@ -30,7 +28,6 @@ const posts = [
     excerpt: "这本小说很有野心，在这么短的篇幅里塞进了三个非常明显的标签：食物与旅行、女女情爱、以及后殖民反思。总的来说，它是一部非常精巧的文学艺术品，但我觉得还不够好。",
     date: "2026-08-16",
     tags: ["读书"],
-    updated: "2026-08-16",
   },
   {
     id: "spider-man-brand-new-day",
@@ -41,7 +38,6 @@ const posts = [
     excerpt: "《蜘蛛侠：崭新之日》的画面、光影和动作设计都非常出色，汤姆·赫兰德的表演也很动人。但在这些优点之外，电影的故事过于忙乱，关键能力设定更出现了难以解释的漏洞。能力越大并不会自动带来责任，反而可能捅出更大的篓子。",
     date: "2026-08-16",
     tags: ["电影"],
-    updated: "2026-08-16",
   },
   {
     id: "heroes-and-the-decline-of-civilization",
@@ -52,7 +48,6 @@ const posts = [
     excerpt: "诺兰的《奥德赛》不只是一个英雄历经艰险、终于回家的故事。它更像是一个关于文明衰落的寓言：当人与人之间最基本的原则被不断打破，暴力又以英雄之名被传颂，毁灭最终也会被下一代继承。",
     date: "2026-08-16",
     tags: ["电影"],
-    updated: "2026-08-16",
   },
   {
     id: "a-suffocating-self-exoneration",
@@ -158,7 +153,7 @@ function renderPosts() {
   clearFilter.hidden = !selectedTopic && !selectedArchive;
   postList.innerHTML = activePosts.length ? activePosts.map((post) => `
     <article class="post-card">
-      <div class="post-meta"><span class="post-section">${post.sectionName}</span><span class="date-label">发表于</span><time datetime="${post.date}">${formatDate(post.date)}</time>${post.updated ? `<span class="date-label">更新于</span><time datetime="${post.updated}">${formatDate(post.updated)}</time>` : ""}</div>
+      <div class="post-meta"><span class="post-section">${post.sectionName}</span><span class="date-label">发表于</span><time datetime="${post.date}">${formatDate(post.date)}</time>${post.updated && post.updated > post.date ? `<span class="date-label">更新于</span><time datetime="${post.updated}">${formatDate(post.updated)}</time>` : ""}</div>
       <h3><a href="${post.url}">${post.title}</a></h3>
       <p class="excerpt">${post.excerpt}</p>
       <div class="post-tags">${post.tags.map((tag) => `<button type="button" class="post-tag" data-topic="${tag}">#${tag}</button>`).join("")}</div>

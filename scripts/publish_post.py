@@ -11,12 +11,12 @@ from pathlib import Path
 from urllib.parse import urlencode
 from urllib.request import urlopen
 
-from PIL import Image, ImageDraw, ImageFont, ImageOps
+from PIL import Image, ImageDraw, ImageFilter, ImageFont, ImageOps
 
 
 ROOT = Path(__file__).resolve().parents[1]
 SITE_URL = "https://halfatree.page/"
-PUBLIC_ASSET_VERSION = "article-image-selection-v1"
+PUBLIC_ASSET_VERSION = "article-image-selection-v2"
 SECTION_NAMES = {"essays": "文章", "arts": "艺文"}
 SHARE_IMAGE_DIR = ROOT / "public" / "media" / "share"
 SHARE_IMAGE_SIZE = (1200, 630)
@@ -148,14 +148,16 @@ def count_written_characters(markdown: str) -> int:
     return len(re.sub(r"\s+", "", text))
 
 
-def contain_image(path: Path, size: tuple[int, int], background: tuple[int, int, int]) -> Image.Image:
-    """Fit an image completely inside a fixed frame, never cropping or stretching it."""
+def adaptive_image_panel(path: Path, size: tuple[int, int], overlay: tuple[int, int, int, int]) -> Image.Image:
+    """Show the complete image and use a soft version of it to fill mismatched ratios."""
     image = Image.open(path).convert("RGB")
     fitted = ImageOps.contain(image, size, method=Image.Resampling.LANCZOS)
-    frame = Image.new("RGB", size, background)
+    backdrop = ImageOps.fit(image, size, method=Image.Resampling.LANCZOS).filter(ImageFilter.GaussianBlur(radius=26))
+    frame = backdrop.convert("RGBA")
+    frame.alpha_composite(Image.new("RGBA", size, overlay))
     offset = ((size[0] - fitted.width) // 2, (size[1] - fitted.height) // 2)
-    frame.paste(fitted, offset)
-    return frame
+    frame.alpha_composite(fitted.convert("RGBA"), offset)
+    return frame.convert("RGB")
 
 
 def share_image_url(metadata: dict[str, object]) -> str:
@@ -166,7 +168,7 @@ def write_share_card(metadata: dict[str, object], cover_image: Path) -> None:
     """Create a standard 1200 × 630 social-preview JPEG for one article."""
     SHARE_IMAGE_DIR.mkdir(parents=True, exist_ok=True)
     card = Image.new("RGB", SHARE_IMAGE_SIZE, (24, 34, 29)).convert("RGBA")
-    card.alpha_composite(contain_image(cover_image, (465, SHARE_IMAGE_SIZE[1]), (24, 34, 29)).convert("RGBA"), (735, 0))
+    card.alpha_composite(adaptive_image_panel(cover_image, (465, SHARE_IMAGE_SIZE[1]), (24, 34, 29, 54)).convert("RGBA"), (735, 0))
     panel = Image.new("RGBA", (735, SHARE_IMAGE_SIZE[1]), (250, 249, 244, 237))
     card.alpha_composite(panel, (0, 0))
     draw = ImageDraw.Draw(card)
@@ -213,7 +215,7 @@ def write_moments_poster(metadata: dict[str, object], cover_image: Path) -> None
     """Create the vertical, QR-enabled image used for WeChat Moments sharing."""
     POSTER_IMAGE_DIR.mkdir(parents=True, exist_ok=True)
     poster = Image.new("RGB", POSTER_IMAGE_SIZE, (250, 249, 244))
-    hero_panel = contain_image(cover_image, (1080, 500), (24, 34, 29))
+    hero_panel = adaptive_image_panel(cover_image, (1080, 500), (24, 34, 29, 48))
     poster.paste(hero_panel, (0, 0))
     draw = ImageDraw.Draw(poster)
     ink = (39, 47, 42)

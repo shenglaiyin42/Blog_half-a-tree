@@ -1,5 +1,16 @@
 const posts = [
   {
+    id: "song-dongye-take-another-moment",
+    url: "./articles/song-dongye-take-another-moment.html",
+    section: "arts",
+    sectionName: "艺文",
+    title: "你爱咋咋地，我也没辙——宋冬野《再想想》",
+    excerpt: "宋冬野终于从《安和桥北》时期那个忧郁的文艺青年，走向了对人生和人生态度的讨论。《再想想》里有一种无可奈何，也有一种隐隐约约的不甘：你爱咋咋地吧，我也没辙，但是我心里还是想跟你说一句，滚蛋。",
+    date: "2026-08-17",
+    updated: "2026-08-17",
+    tags: ["音乐"],
+  },
+  {
     id: "taiwan-travelogue-review",
     url: "./articles/taiwan-travelogue-review.html",
     section: "arts",

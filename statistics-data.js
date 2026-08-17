@@ -1,5 +1,10 @@
 window.statisticsPosts = [
   {
+    id: "song-dongye-take-another-moment",
+    date: "2026-08-17",
+    wordCount: 1044,
+  },
+  {
     id: "taiwan-travelogue-review",
     date: "2026-08-16",
     wordCount: 981,

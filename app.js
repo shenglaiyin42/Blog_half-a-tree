@@ -8,6 +8,7 @@ const posts = [
     excerpt: "这本小说很有野心，在这么短的篇幅里塞进了三个非常明显的标签：食物与旅行、女女情爱、以及后殖民反思。总的来说，它是一部非常精巧的文学艺术品，但我觉得还不够好。",
     date: "2026-08-16",
     tags: ["读书"],
+    updated: "2026-08-16",
   },
   {
     id: "spider-man-brand-new-day",
@@ -18,6 +19,7 @@ const posts = [
     excerpt: "《蜘蛛侠：崭新之日》的画面、光影和动作设计都非常出色，汤姆·赫兰德的表演也很动人。但在这些优点之外，电影的故事过于忙乱，关键能力设定更出现了难以解释的漏洞。能力越大并不会自动带来责任，反而可能捅出更大的篓子。",
     date: "2026-08-16",
     tags: ["电影"],
+    updated: "2026-08-16",
   },
   {
     id: "heroes-and-the-decline-of-civilization",
@@ -28,6 +30,7 @@ const posts = [
     excerpt: "诺兰的《奥德赛》不只是一个英雄历经艰险、终于回家的故事。它更像是一个关于文明衰落的寓言：当人与人之间最基本的原则被不断打破，暴力又以英雄之名被传颂，毁灭最终也会被下一代继承。",
     date: "2026-08-16",
     tags: ["电影"],
+    updated: "2026-08-16",
   },
   {
     id: "a-suffocating-self-exoneration",
@@ -38,6 +41,7 @@ const posts = [
     excerpt: "读李翊云的《万物只是自然生长》，我的心情从一开始的不安，到最后变成了极度的反感和恶心。作为一个母亲，两个孩子相继选择相同的方式自杀，这难道不是家庭出了大问题吗？可身为作家的母亲在书里仅仅反思了她自己的",
     date: "2026-08-15",
     tags: ["读书"],
+    updated: "2026-08-16",
   },
 ];
 
@@ -132,7 +136,7 @@ function renderPosts() {
   clearFilter.hidden = !selectedTopic && !selectedArchive;
   postList.innerHTML = activePosts.length ? activePosts.map((post) => `
     <article class="post-card">
-      <div class="post-meta"><span class="post-section">${post.sectionName}</span><time datetime="${post.date}">${formatDate(post.date)}</time></div>
+      <div class="post-meta"><span class="post-section">${post.sectionName}</span><span class="date-label">发表于</span><time datetime="${post.date}">${formatDate(post.date)}</time>${post.updated ? `<span class="date-label">更新于</span><time datetime="${post.updated}">${formatDate(post.updated)}</time>` : ""}</div>
       <h3><a href="${post.url}">${post.title}</a></h3>
       <p class="excerpt">${post.excerpt}</p>
       <div class="post-tags">${post.tags.map((tag) => `<button type="button" class="post-tag" data-topic="${tag}">#${tag}</button>`).join("")}</div>

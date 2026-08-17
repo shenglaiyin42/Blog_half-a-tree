@@ -3,6 +3,7 @@ title: 《台湾漫游录》书评
 slug: taiwan-travelogue-review
 section: arts
 date: 2026-08-16
+updated: 2026-08-16
 summary: 这本小说很有野心，在这么短的篇幅里塞进了三个非常明显的标签：食物与旅行、女女情爱、以及后殖民反思。总的来说，它是一部非常精巧的文学艺术品，但我觉得还不够好。
 share_image: ""
 tags:

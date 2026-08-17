@@ -7,7 +7,7 @@
   if (!article || !articleBody || !title || document.querySelector(".article-share")) return;
 
   const canonicalUrl = document.querySelector('link[rel="canonical"]')?.href;
-  const publicSiteBase = "https://shenglaiyin42.github.io/Blog_half-a-tree/";
+  const publicSiteBase = "https://halfatree.page/";
   const localArticlePath = window.location.pathname.split("/articles/")[1];
   const pageUrl = canonicalUrl || (localArticlePath
     ? new URL(`articles/${localArticlePath}`, publicSiteBase).href
@@ -19,7 +19,7 @@
   blueskyUrl.searchParams.set("text", shareText);
   const articleSlug = new URL(pageUrl).pathname.split("/articles/").pop()?.replace(/\.html$/, "");
   const posterUrl = articleSlug
-    ? new URL(`public/media/posters/${articleSlug}.jpg?v=poster-layout-v2`, publicSiteBase).href
+    ? new URL(`public/media/posters/${articleSlug}.jpg?v=halfatree-page-v1`, publicSiteBase).href
     : null;
 
   const sharePanel = document.createElement("section");

@@ -22,6 +22,7 @@ SHARE_IMAGE_DIR = ROOT / "public" / "media" / "share"
 SHARE_IMAGE_SIZE = (1200, 630)
 POSTER_IMAGE_DIR = ROOT / "public" / "media" / "posters"
 POSTER_IMAGE_SIZE = (1080, 1200)
+STATISTICS_DATA_PATH = ROOT / "statistics-data.js"
 HERO_IMAGE_PATH = ROOT / "public" / "media" / "half-a-tree-canyon-hero.png"
 CHINESE_FONT_PATHS = (
     "/System/Library/AssetsV2/com_apple_MobileAsset_Font8/86ba2c91f017a3749571a82f2c6d890ac7ffb2fb.asset/AssetData/PingFang.ttc",
@@ -137,6 +138,14 @@ def article_cover_image(markdown: str, metadata: dict[str, object]) -> Path:
         "文章有多张插图，无法替你猜测名片图片。"
         f"请确认使用哪一张，并在 frontmatter 中加入 share_image: 图片路径。可选：{numbered}"
     )
+
+
+def count_written_characters(markdown: str) -> int:
+    """Count written characters, excluding whitespace and Markdown image/link syntax."""
+    text = re.sub(r"!\[[^\]]*\]\([^)]*\)", "", markdown)
+    text = re.sub(r"\[([^\]]+)\]\([^)]*\)", r"\1", text)
+    text = re.sub(r"[*_#>`~-]", "", text)
+    return len(re.sub(r"\s+", "", text))
 
 
 def contain_image(path: Path, size: tuple[int, int], background: tuple[int, int, int]) -> Image.Image:
@@ -346,6 +355,27 @@ def update_index(metadata: dict[str, object]) -> None:
     app_path.write_text(app.replace("const posts = [\n", f"const posts = [\n{entry}", 1), encoding="utf-8")
 
 
+def update_statistics_data(metadata: dict[str, object], markdown: str) -> None:
+    """Add the newly published post's count to the statistics data source."""
+    if not STATISTICS_DATA_PATH.exists():
+        STATISTICS_DATA_PATH.write_text("const statisticsPosts = [\n];\n", encoding="utf-8")
+    data = STATISTICS_DATA_PATH.read_text(encoding="utf-8")
+    slug = str(metadata["slug"])
+    if f'id: "{slug}"' in data:
+        return
+    entry = (
+        "  {\n"
+        f'    id: "{slug}",\n'
+        f'    date: "{metadata["date"]}",\n'
+        f"    wordCount: {count_written_characters(markdown)},\n"
+        "  },\n"
+    )
+    STATISTICS_DATA_PATH.write_text(
+        data.replace("const statisticsPosts = [\n", f"const statisticsPosts = [\n{entry}", 1),
+        encoding="utf-8",
+    )
+
+
 def update_rss(metadata: dict[str, object]) -> None:
     rss_path = ROOT / "rss.xml"
     rss = rss_path.read_text(encoding="utf-8")
@@ -386,6 +416,7 @@ def main() -> None:
         return
     write_article(metadata, markdown)
     update_index(metadata)
+    update_statistics_data(metadata, markdown)
     update_rss(metadata)
 
 

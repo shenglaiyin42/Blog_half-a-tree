@@ -1,5 +1,15 @@
 const posts = [
   {
+    id: "taiwan-travelogue-review",
+    url: "./articles/taiwan-travelogue-review.html",
+    section: "arts",
+    sectionName: "艺文",
+    title: "《台湾漫游录》书评",
+    excerpt: "这本小说很有野心，在这么短的篇幅里塞进了三个非常明显的标签：食物与旅行、女女情爱、以及后殖民反思。总的来说，它是一部非常精巧的文学艺术品，但我觉得还不够好。",
+    date: "2026-08-16",
+    tags: ["读书"],
+  },
+  {
     id: "spider-man-brand-new-day",
     url: "./articles/spider-man-brand-new-day.html",
     section: "arts",

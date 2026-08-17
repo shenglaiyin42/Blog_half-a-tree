@@ -64,11 +64,12 @@ def render_body(markdown: str) -> str:
     blocks = [line.strip() for line in markdown.splitlines() if line.strip()]
     rendered = []
     for block in blocks:
-        image_match = re.fullmatch(r"!\[(.*?)\]\((.*?)\)", block)
+        image_match = re.fullmatch(r"!\[(.*?)\]\((.*?)\)(?:\{\.half\})?", block)
         if image_match:
             alt, source = image_match.groups()
+            figure_class = "article-image article-image-half" if block.endswith("{.half}") else "article-image"
             rendered.append(
-                '<figure class="article-image">'
+                f'<figure class="{figure_class}">'
                 f'<img src="{html.escape(source, quote=True)}" '
                 f'alt="{html.escape(alt, quote=True)}" loading="lazy" />'
                 "</figure>"

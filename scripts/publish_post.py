@@ -42,7 +42,7 @@ CHINESE_FONT_PATHS = (
 
 
 def validate_metadata(metadata: dict[str, object]) -> None:
-    required = {"title", "slug", "section", "date", "updated", "summary"}
+    required = {"title", "slug", "section", "date", "summary"}
     missing = [key for key in required if not metadata.get(key)]
     if missing:
         raise ValueError(f"Missing required metadata: {', '.join(missing)}")
@@ -51,8 +51,10 @@ def validate_metadata(metadata: dict[str, object]) -> None:
     if not re.fullmatch(r"[a-z0-9-]+", str(metadata["slug"])):
         raise ValueError("slug may only contain lowercase letters, numbers, and hyphens")
     for key in ("date", "updated"):
-        if not re.fullmatch(r"\d{4}-\d{2}-\d{2}", str(metadata[key])):
+        if metadata.get(key) and not re.fullmatch(r"\d{4}-\d{2}-\d{2}", str(metadata[key])):
             raise ValueError(f"{key} must use YYYY-MM-DD")
+    if metadata.get("updated") and str(metadata["updated"]) <= str(metadata["date"]):
+        raise ValueError("更新日期必须晚于首次发表日期；首次发布时请留空")
 
 
 def read_editable_metadata(raw: str) -> tuple[dict[str, object], str] | None:
@@ -356,7 +358,7 @@ def write_article(metadata: dict[str, object], markdown: str) -> None:
     year, month, day = date.split("-")
     updated = str(metadata.get("updated", "")).strip()
     updated_meta = ""
-    if updated:
+    if updated and updated > date:
         updated_year, updated_month, updated_day = updated.split("-")
         updated_meta = (
             f'<span class="date-label">更新于</span>'
@@ -400,7 +402,20 @@ def update_index(metadata: dict[str, object]) -> None:
     app_path = ROOT / "app.js"
     app = app_path.read_text(encoding="utf-8")
     slug = str(metadata["slug"])
-    if f'id: "{slug}"' in app:
+    existing_entry = re.search(
+        rf'  \{{\n    id: "{re.escape(slug)}",\n.*?\n  \}},\n',
+        app,
+        re.S,
+    )
+    if existing_entry:
+        entry = re.sub(r'    updated: "\d{4}-\d{2}-\d{2}",\n', "", existing_entry.group(0))
+        updated = str(metadata.get("updated", "")).strip()
+        if updated and updated > str(metadata["date"]):
+            entry = entry.replace('    tags:', f'    updated: "{updated}",\n    tags:', 1)
+        app_path.write_text(
+            app[: existing_entry.start()] + entry + app[existing_entry.end() :],
+            encoding="utf-8",
+        )
         return
     tags = ", ".join(f'"{tag}"' for tag in metadata["tags"])
     entry = f'''  {{
@@ -412,7 +427,7 @@ def update_index(metadata: dict[str, object]) -> None:
     excerpt: "{metadata["summary"]}",
     date: "{metadata["date"]}",
 '''
-    if metadata.get("updated"):
+    if metadata.get("updated") and str(metadata["updated"]) > str(metadata["date"]):
         entry += f'    updated: "{metadata["updated"]}",\n'
     entry += '''    tags: [{tags}],
   },

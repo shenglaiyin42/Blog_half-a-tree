@@ -46,6 +46,14 @@
     if (element) element.textContent = value;
   }
 
+  function setNumber(id, value) {
+    const element = document.getElementById(id);
+    if (!element) return;
+    const unit = element.querySelector("span");
+    element.textContent = value;
+    if (unit) element.append(unit);
+  }
+
   function renderRows(targetId, groups, labelFunction) {
     const target = document.getElementById(targetId);
     if (!target) return;
@@ -63,12 +71,12 @@
   const currentWeek = weekly[0]?.[1] || { count: 0, words: 0 };
   const currentMonth = monthly[0]?.[1] || { count: 0, words: 0 };
 
-  setText("stats-week-count", number.format(currentWeek.count));
-  setText("stats-week-words", number.format(currentWeek.words));
-  setText("stats-month-count", number.format(currentMonth.count));
-  setText("stats-month-words", number.format(currentMonth.words));
-  setText("stats-total-count", number.format(posts.length));
-  setText("stats-total-words", number.format(totalWords));
+  setNumber("stats-week-count", number.format(currentWeek.count));
+  setNumber("stats-week-words", number.format(currentWeek.words));
+  setNumber("stats-month-count", number.format(currentMonth.count));
+  setNumber("stats-month-words", number.format(currentMonth.words));
+  setNumber("stats-total-count", number.format(posts.length));
+  setNumber("stats-total-words", number.format(totalWords));
   setText("stats-current-week", weekly[0] ? weekLabel(weekly[0][0]) : "暂无文章");
   setText("stats-current-month", monthly[0] ? monthLabel(monthly[0][0]) : "暂无文章");
   renderRows("stats-weekly-list", weekly, weekLabel);

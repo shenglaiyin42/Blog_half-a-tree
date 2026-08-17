@@ -305,6 +305,16 @@ def write_article(metadata: dict[str, object], markdown: str) -> None:
     section = str(metadata["section"])
     date = str(metadata["date"])
     year, month, day = date.split("-")
+    updated = str(metadata.get("updated", "")).strip()
+    updated_meta = ""
+    if updated:
+        updated_year, updated_month, updated_day = updated.split("-")
+        updated_meta = (
+            f'<span class="date-label">更新于</span>'
+            f'<time datetime="{html.escape(updated, quote=True)}">'
+            f"{updated_year}年{int(updated_month)}月{int(updated_day)}日"
+            "</time>"
+        )
     title = html.escape(str(metadata["title"]))
     tags = "".join(f"<span># {html.escape(tag)}</span>" for tag in metadata["tags"])
     template = (ROOT / "templates/article-page.html").read_text(encoding="utf-8")
@@ -317,6 +327,7 @@ def write_article(metadata: dict[str, object], markdown: str) -> None:
         "{{SECTION_NAME}}": SECTION_NAMES[section],
         "{{DATE_ISO}}": date,
         "{{DATE_DISPLAY}}": f"{year}年{int(month)}月{int(day)}日",
+        "{{UPDATED_META}}": updated_meta,
         "{{ARTICLE_TAGS}}": tags,
         "{{ARTICLE_BODY}}": render_body(markdown),
     }
@@ -351,9 +362,12 @@ def update_index(metadata: dict[str, object]) -> None:
     title: "{metadata["title"]}",
     excerpt: "{metadata["summary"]}",
     date: "{metadata["date"]}",
-    tags: [{tags}],
-  }},
 '''
+    if metadata.get("updated"):
+        entry += f'    updated: "{metadata["updated"]}",\n'
+    entry += '''    tags: [{tags}],
+  }},
+'''.replace("{tags}", tags)
     app_path.write_text(app.replace("const posts = [\n", f"const posts = [\n{entry}", 1), encoding="utf-8")
 
 

@@ -64,7 +64,16 @@ def render_body(markdown: str) -> str:
     blocks = [line.strip() for line in markdown.splitlines() if line.strip()]
     rendered = []
     for block in blocks:
-        if block.startswith("**") and block.endswith("**"):
+        image_match = re.fullmatch(r"!\[(.*?)\]\((.*?)\)", block)
+        if image_match:
+            alt, source = image_match.groups()
+            rendered.append(
+                '<figure class="article-image">'
+                f'<img src="{html.escape(source, quote=True)}" '
+                f'alt="{html.escape(alt, quote=True)}" loading="lazy" />'
+                "</figure>"
+            )
+        elif block.startswith("**") and block.endswith("**"):
             rendered.append(f"<p><strong>{html.escape(block[2:-2])}</strong></p>")
         else:
             rendered.append(f"<p>{html.escape(block)}</p>")

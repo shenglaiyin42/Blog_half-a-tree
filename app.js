@@ -1,5 +1,16 @@
 const posts = [
   {
+    id: "in-the-face-of-geological-time",
+    url: "./articles/in-the-face-of-geological-time.html",
+    section: "essays",
+    sectionName: "文章",
+    title: "在百万年的时间面前",
+    excerpt: "我们眼前看到的地质现象，动辄以百万年为时间单位；人的一生最多不过百年，而许多烦恼甚至只持续几小时。这跟大自然比起来，真的不值一提。",
+    date: "2026-08-17",
+    updated: "2026-08-17",
+    tags: ["随想"],
+  },
+  {
     id: "song-dongye-take-another-moment",
     url: "./articles/song-dongye-take-another-moment.html",
     section: "arts",

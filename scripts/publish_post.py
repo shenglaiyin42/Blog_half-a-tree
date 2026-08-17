@@ -18,6 +18,17 @@ ROOT = Path(__file__).resolve().parents[1]
 SITE_URL = "https://halfatree.page/"
 PUBLIC_ASSET_VERSION = "article-image-selection-v2"
 SECTION_NAMES = {"essays": "文章", "arts": "艺文"}
+SECTION_KEYS = {"文章": "essays", "艺文": "arts", **{key: key for key in SECTION_NAMES}}
+EDITABLE_METADATA_FIELDS = {
+    "标题": "title",
+    "网址名": "slug",
+    "栏目": "section",
+    "首次发表": "date",
+    "更新于": "updated",
+    "摘要": "summary",
+    "名片图片": "share_image",
+    "标签": "tags",
+}
 SHARE_IMAGE_DIR = ROOT / "public" / "media" / "share"
 SHARE_IMAGE_SIZE = (1200, 630)
 POSTER_IMAGE_DIR = ROOT / "public" / "media" / "posters"
@@ -30,35 +41,73 @@ CHINESE_FONT_PATHS = (
 )
 
 
-def read_post(path: Path) -> tuple[dict[str, object], str]:
-    raw = path.read_text(encoding="utf-8")
+def validate_metadata(metadata: dict[str, object]) -> None:
+    required = {"title", "slug", "section", "date", "updated", "summary"}
+    missing = [key for key in required if not metadata.get(key)]
+    if missing:
+        raise ValueError(f"Missing required metadata: {', '.join(missing)}")
+    if metadata["section"] not in SECTION_NAMES:
+        raise ValueError("section must be essays/文章 or arts/艺文")
+    if not re.fullmatch(r"[a-z0-9-]+", str(metadata["slug"])):
+        raise ValueError("slug may only contain lowercase letters, numbers, and hyphens")
+    for key in ("date", "updated"):
+        if not re.fullmatch(r"\d{4}-\d{2}-\d{2}", str(metadata[key])):
+            raise ValueError(f"{key} must use YYYY-MM-DD")
+
+
+def read_editable_metadata(raw: str) -> tuple[dict[str, object], str] | None:
+    match = re.match(
+        r"\A<!-- BLOG_METADATA_START -->\n(.*?)\n<!-- BLOG_METADATA_END -->\n?(.*)\Z",
+        raw,
+        re.S,
+    )
+    if not match:
+        return None
+
+    metadata: dict[str, object] = {}
+    for raw_line in match.group(1).splitlines():
+        line = raw_line.strip()
+        if not line or line.startswith("#") or "：" not in line:
+            continue
+        label, value = line.split("：", 1)
+        key = EDITABLE_METADATA_FIELDS.get(label.strip())
+        if not key:
+            continue
+        value = value.strip()
+        if key == "tags":
+            metadata[key] = [tag.strip().lstrip("#").strip() for tag in re.split(r"[，,、]", value) if tag.strip()]
+        elif key == "section":
+            metadata[key] = SECTION_KEYS.get(value, value)
+        else:
+            metadata[key] = value
+    metadata.setdefault("tags", [])
+    validate_metadata(metadata)
+    return metadata, match.group(2).strip()
+
+
+def read_yaml_frontmatter(raw: str) -> tuple[dict[str, object], str] | None:
     match = re.match(r"\A---\n(.*?)\n---\n(.*)\Z", raw, re.S)
     if not match:
-        raise ValueError("Markdown must begin with YAML frontmatter.")
+        return None
     metadata: dict[str, object] = {}
     tags: list[str] = []
-    in_tags = False
     for line in match.group(1).splitlines():
         if line.startswith("  - "):
             tags.append(line[4:].strip().strip('"'))
-            continue
-        in_tags = line.startswith("tags:")
-        if in_tags:
-            metadata["tags"] = tags
-            continue
-        if ":" in line and not line.lstrip().startswith("#"):
+        elif ":" in line and not line.lstrip().startswith("#"):
             key, value = line.split(":", 1)
             metadata[key.strip()] = value.strip().strip('"')
     metadata["tags"] = tags
-    required = {"title", "slug", "section", "date", "summary"}
-    missing = [key for key in required if not metadata.get(key)]
-    if missing:
-        raise ValueError(f"Missing required frontmatter: {', '.join(missing)}")
-    if metadata["section"] not in SECTION_NAMES:
-        raise ValueError("section must be essays or arts")
-    if not re.fullmatch(r"[a-z0-9-]+", str(metadata["slug"])):
-        raise ValueError("slug may only contain lowercase letters, numbers, and hyphens")
+    validate_metadata(metadata)
     return metadata, match.group(2).strip()
+
+
+def read_post(path: Path) -> tuple[dict[str, object], str]:
+    raw = path.read_text(encoding="utf-8")
+    parsed = read_editable_metadata(raw) or read_yaml_frontmatter(raw)
+    if not parsed:
+        raise ValueError("Markdown must begin with an editable article-information block or YAML frontmatter.")
+    return parsed
 
 
 def render_body(markdown: str) -> str:
@@ -366,7 +415,7 @@ def update_index(metadata: dict[str, object]) -> None:
     if metadata.get("updated"):
         entry += f'    updated: "{metadata["updated"]}",\n'
     entry += '''    tags: [{tags}],
-  }},
+  },
 '''.replace("{tags}", tags)
     app_path.write_text(app.replace("const posts = [\n", f"const posts = [\n{entry}", 1), encoding="utf-8")
 

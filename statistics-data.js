@@ -1,5 +1,10 @@
 window.statisticsPosts = [
   {
+    id: "in-the-face-of-geological-time",
+    date: "2026-08-17",
+    wordCount: 262,
+  },
+  {
     id: "song-dongye-take-another-moment",
     date: "2026-08-17",
     wordCount: 1044,

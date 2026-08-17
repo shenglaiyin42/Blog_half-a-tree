@@ -1,4 +1,4 @@
-const statisticsPosts = [
+window.statisticsPosts = [
   {
     id: "taiwan-travelogue-review",
     date: "2026-08-16",

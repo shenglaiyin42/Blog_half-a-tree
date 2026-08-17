@@ -358,7 +358,7 @@ def update_index(metadata: dict[str, object]) -> None:
 def update_statistics_data(metadata: dict[str, object], markdown: str) -> None:
     """Add the newly published post's count to the statistics data source."""
     if not STATISTICS_DATA_PATH.exists():
-        STATISTICS_DATA_PATH.write_text("const statisticsPosts = [\n];\n", encoding="utf-8")
+        STATISTICS_DATA_PATH.write_text("window.statisticsPosts = [\n];\n", encoding="utf-8")
     data = STATISTICS_DATA_PATH.read_text(encoding="utf-8")
     slug = str(metadata["slug"])
     if f'id: "{slug}"' in data:
@@ -371,7 +371,7 @@ def update_statistics_data(metadata: dict[str, object], markdown: str) -> None:
         "  },\n"
     )
     STATISTICS_DATA_PATH.write_text(
-        data.replace("const statisticsPosts = [\n", f"const statisticsPosts = [\n{entry}", 1),
+        data.replace("window.statisticsPosts = [\n", f"window.statisticsPosts = [\n{entry}", 1),
         encoding="utf-8",
     )
 

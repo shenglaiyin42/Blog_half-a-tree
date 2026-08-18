@@ -3,87 +3,75 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta
-      name="description"
-      content="半棵斋｜Half a Tree — Notes from a small room"
-    />
+    <meta name="description" content="半棵斋｜Half a Tree — Notes from a small room" />
     <title>半棵斋｜Half a Tree</title>
     <link rel="alternate" type="application/rss+xml" title="半棵斋 RSS" href="./rss.xml" />
     <link rel="stylesheet" href="./styles.css" />
   </head>
   <body>
-    <header class="site-header">
-      <div class="hero" role="img" aria-label="峡谷、远山与河流"></div>
-
-      <div class="identity wrap">
-        <p class="eyebrow">A personal blog</p>
-        <h1><a class="site-title" href="https://halfatree.page/" aria-label="返回首页：半棵斋 Half a Tree">半棵斋 <span>｜</span> <em>Half a Tree</em></a></h1>
-        <p class="motto">Sustainable development cannot save us. Sustainable retreat, maybe.</p>
-      </div>
-
-      <div class="nav-shell">
-        <nav class="wrap site-nav" aria-label="主导航">
-          <a class="rss-link" href="./rss.xml" title="订阅 RSS" aria-label="订阅 RSS">
-            <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="6" cy="18" r="2.1"></circle><path d="M4 10.1a9.9 9.9 0 0 1 9.9 9.9M4 4a16 16 0 0 1 16 16"></path></svg>
-            <span>RSS / 订阅</span>
-          </a>
-          <div class="nav-pages">
-            <button class="nav-link is-active" data-section="essays">文章 <span>/ Essays</span></button>
-            <button class="nav-link" data-section="arts">艺文 <span>/ Arts &amp; Culture</span></button>
-            <a class="nav-link" href="./statistics.html">统计 <span>/ Statistics</span></a>
-          </div>
-        </nav>
-      </div>
+    <header class="topbar">
+      <nav class="wrap top-nav" aria-label="主导航">
+        <a class="top-brand" href="/">半棵斋 <span>/ Half a Tree</span></a>
+        <div class="top-links">
+          <a class="top-link" href="/about/">About / 关于</a>
+          <a class="top-link" href="/now/">Now / 现在</a>
+          <a class="top-link" href="/rss.xml">RSS / 订阅</a>
+        </div>
+      </nav>
     </header>
 
-    <main class="wrap content-layout">
-      <aside class="sidebar" aria-label="文章筛选">
-        <section class="sidebar-section">
-          <div class="section-heading">
-            <p>标签</p>
-            <span>Topics</span>
-          </div>
-          <div class="topic-list" id="topic-list"></div>
+    <main class="wrap home-layout">
+      <aside class="home-sidebar">
+        <section class="home-identity" aria-labelledby="site-name">
+          <p class="eyebrow">A personal blog</p>
+          <h1 id="site-name">半棵斋 <span>｜</span> <em>Half a Tree</em></h1>
+          <p class="home-notes"><em>Notes from a small room.</em></p>
+          <p class="home-motto">Sustainable development cannot save us. Sustainable retreat, maybe.</p>
         </section>
 
-        <section class="sidebar-section archives-section">
-          <div class="section-heading">
-            <p>归档</p>
-            <span>Archive</span>
-          </div>
-          <div class="archive-list" id="archive-list"></div>
+        <section class="home-archive plain-section" aria-labelledby="archive-heading">
+          <div class="plain-heading"><h2 id="archive-heading">Archive / 归档</h2></div>
+          <nav class="archive-list" id="archive-list" aria-label="按年月筛选随笔"></nav>
         </section>
 
-        <section class="sidebar-section site-card-section" aria-label="分享网站名片">
-          <button class="site-card-download" id="site-card-share" type="button" aria-describedby="site-card-share-status">
-            <img src="https://api.qrserver.com/v1/create-qr-code/?size=180x180&amp;format=png&amp;data=https%3A%2F%2Fhalfatree.page%2F" alt="扫描二维码访问半棵斋" />
-            <span class="site-card-copy">
-              <strong>网站名片</strong>
-              <em>Site Card</em>
-              <small id="site-card-share-status">点击分享名片</small>
-            </span>
-          </button>
+        <section class="home-statistics plain-section" aria-labelledby="statistics-heading">
+          <div class="plain-heading"><h2 id="statistics-heading">Statistics / 统计</h2></div>
+          <dl class="statistics-list">
+            <div><dt>本周</dt><dd><strong id="home-week-count">0</strong> 篇</dd></div>
+            <div><dt>本月</dt><dd><strong id="home-month-count">0</strong> 篇</dd></div>
+            <div><dt>累计</dt><dd><strong id="home-total-count">0</strong> 篇</dd></div>
+            <div><dt>总字数</dt><dd><strong id="home-total-words">0</strong> 字</dd></div>
+          </dl>
         </section>
       </aside>
 
-      <section class="reading-area" aria-live="polite">
-        <div class="result-heading">
-          <div>
-            <p class="result-kicker" id="result-kicker">ESSAYS</p>
-            <h2 id="result-title">文章</h2>
+      <section class="home-main" aria-label="写作浏览">
+        <section class="plain-section topics-section" aria-labelledby="topics-heading">
+          <div class="plain-heading">
+            <h2 id="topics-heading">Topics / 话题</h2>
           </div>
-          <button class="clear-filter" id="clear-filter" type="button" hidden>清除筛选</button>
-        </div>
-        <div class="post-list" id="post-list"></div>
+          <nav class="topic-list" id="topic-list" aria-label="按话题筛选写作"></nav>
+        </section>
+
+        <section class="plain-section writing-section" aria-labelledby="writing-heading">
+          <div class="plain-heading writing-heading-row">
+            <h2 id="writing-heading">Posts / 随笔</h2>
+            <a class="clear-filter" id="clear-filter" href="/" hidden>查看全部</a>
+          </div>
+          <p class="filter-summary" id="filter-summary" hidden></p>
+          <div class="writing-list" id="writing-list"></div>
+        </section>
       </section>
+
     </main>
 
     <footer class="site-footer wrap">
       <p>半棵斋｜Half a Tree</p>
-      <p>Notes from a small room</p>
+      <p>Notes from a Small Room</p>
     </footer>
 
-    <script src="./app.js?v=article-file-route-v1"></script>
-    <script src="./site-card-share.js?v=site-card-share-v2"></script>
+    <script src="./site-data.js"></script>
+    <script src="./site-statistics.js"></script>
+    <script src="./app.js"></script>
   </body>
 </html>

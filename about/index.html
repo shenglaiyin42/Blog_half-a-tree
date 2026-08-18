@@ -3,19 +3,18 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="description" content="{{ARTICLE_SUMMARY}}" />
-    {{ARTICLE_SHARE_METADATA}}
-    <link rel="canonical" href="{{ARTICLE_CANONICAL_URL}}" />
-    <title>{{ARTICLE_TITLE}}｜半棵斋</title>
+    <meta name="description" content="关于半棵斋，一个记录阅读、观察和思考的个人博客。" />
+    <link rel="canonical" href="https://halfatree.page/about/" />
+    <title>About / 关于半棵斋</title>
     <link rel="alternate" type="application/rss+xml" title="半棵斋 RSS" href="../rss.xml" />
-    <link rel="stylesheet" href="../styles.css?v=writing-timeline-v1" />
+    <link rel="stylesheet" href="../styles.css" />
   </head>
   <body>
     <header class="topbar">
       <nav class="wrap top-nav" aria-label="主导航">
         <a class="top-brand" href="/">半棵斋 <span>/ Half a Tree</span></a>
         <div class="top-links">
-          <a class="top-link" href="/about/">About / 关于</a>
+          <a class="top-link is-active" href="/about/" aria-current="page">About / 关于</a>
           <a class="top-link" href="/now/">Now / 现在</a>
           <a class="top-link" href="/rss.xml">RSS / 订阅</a>
         </div>
@@ -23,15 +22,15 @@
     </header>
 
     <main class="article-shell">
-      <a class="article-back" href="/now/">← 返回随笔</a>
+      <a class="article-back" href="/">← 返回首页</a>
       <article>
         <header class="article-header">
-          <p class="article-meta"><span class="date-label">发表于</span><time datetime="{{DATE_ISO}}">{{DATE_DISPLAY}}</time>{{UPDATED_META}}</p>
-          <h1 class="article-title">{{ARTICLE_TITLE}}</h1>
-          <div class="article-tags" aria-label="话题">{{ARTICLE_TOPICS}}</div>
+          <h1 class="article-title">About / 关于半棵斋</h1>
         </header>
         <div class="article-body">
-          {{ARTICLE_BODY}}
+          <p>半棵斋是一个记录阅读、观察和思考的个人博客。</p>
+          <p>这里写生活、读书、音乐、城市、文化、历史，也写一些更难归类的日常问题，当然包括日常中的碎碎念，对那些看起来理所当然的事情尤其感兴趣。</p>
+          <p><em>Notes from a small room.</em></p>
         </div>
       </article>
     </main>
@@ -40,6 +39,5 @@
       <p>半棵斋｜Half a Tree</p>
       <p>Notes from a Small Room</p>
     </footer>
-    <script src="../article-share.js?v=moments-poster-v7"></script>
   </body>
 </html>

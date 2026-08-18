@@ -5,6 +5,7 @@ from __future__ import annotations
 
 import argparse
 import html
+import json
 import re
 from io import BytesIO
 from pathlib import Path
@@ -17,8 +18,8 @@ from PIL import Image, ImageDraw, ImageFilter, ImageFont, ImageOps
 ROOT = Path(__file__).resolve().parents[1]
 SITE_URL = "https://halfatree.page/"
 PUBLIC_ASSET_VERSION = "article-image-selection-v2"
-SECTION_NAMES = {"essays": "文章", "arts": "艺文"}
-SECTION_KEYS = {"文章": "essays", "艺文": "arts", **{key: key for key in SECTION_NAMES}}
+SECTION_NAMES = {"writing": "随笔", "essays": "文章", "arts": "艺文"}
+SECTION_KEYS = {"写作": "writing", "文章": "essays", "艺文": "arts", **{key: key for key in SECTION_NAMES}}
 EDITABLE_METADATA_FIELDS = {
     "标题": "title",
     "网址名": "slug",
@@ -27,13 +28,14 @@ EDITABLE_METADATA_FIELDS = {
     "更新于": "updated",
     "摘要": "summary",
     "名片图片": "share_image",
+    "话题": "topics",
     "标签": "tags",
 }
 SHARE_IMAGE_DIR = ROOT / "public" / "media" / "share"
 SHARE_IMAGE_SIZE = (1200, 630)
 POSTER_IMAGE_DIR = ROOT / "public" / "media" / "posters"
 POSTER_IMAGE_SIZE = (1080, 1200)
-STATISTICS_DATA_PATH = ROOT / "statistics-data.js"
+SITE_DATA_PATH = ROOT / "site-data.js"
 HERO_IMAGE_PATH = ROOT / "public" / "media" / "half-a-tree-canyon-hero.png"
 CHINESE_FONT_PATHS = (
     "/System/Library/AssetsV2/com_apple_MobileAsset_Font8/86ba2c91f017a3749571a82f2c6d890ac7ffb2fb.asset/AssetData/PingFang.ttc",
@@ -42,12 +44,12 @@ CHINESE_FONT_PATHS = (
 
 
 def validate_metadata(metadata: dict[str, object]) -> None:
-    required = {"title", "slug", "section", "date", "summary"}
+    required = {"title", "slug", "date", "summary"}
     missing = [key for key in required if not metadata.get(key)]
     if missing:
         raise ValueError(f"Missing required metadata: {', '.join(missing)}")
-    if metadata["section"] not in SECTION_NAMES:
-        raise ValueError("section must be essays/文章 or arts/艺文")
+    if metadata.get("section") and metadata["section"] not in SECTION_NAMES:
+        raise ValueError("历史栏目只能使用 essays/文章或 arts/艺文；新文章请省略栏目")
     if not re.fullmatch(r"[a-z0-9-]+", str(metadata["slug"])):
         raise ValueError("slug may only contain lowercase letters, numbers, and hyphens")
     for key in ("date", "updated"):
@@ -76,13 +78,14 @@ def read_editable_metadata(raw: str) -> tuple[dict[str, object], str] | None:
         if not key:
             continue
         value = value.strip()
-        if key == "tags":
+        if key in {"tags", "topics"}:
             metadata[key] = [tag.strip().lstrip("#").strip() for tag in re.split(r"[，,、]", value) if tag.strip()]
         elif key == "section":
             metadata[key] = SECTION_KEYS.get(value, value)
         else:
             metadata[key] = value
-    metadata.setdefault("tags", [])
+    metadata["topics"] = metadata.get("topics") or metadata.get("tags") or []
+    metadata.setdefault("section", "writing")
     validate_metadata(metadata)
     return metadata, match.group(2).strip()
 
@@ -92,14 +95,29 @@ def read_yaml_frontmatter(raw: str) -> tuple[dict[str, object], str] | None:
     if not match:
         return None
     metadata: dict[str, object] = {}
-    tags: list[str] = []
+    list_key: str | None = None
     for line in match.group(1).splitlines():
-        if line.startswith("  - "):
-            tags.append(line[4:].strip().strip('"'))
+        if line.startswith("  - ") and list_key:
+            metadata.setdefault(list_key, []).append(line[4:].strip().strip('"'))
         elif ":" in line and not line.lstrip().startswith("#"):
             key, value = line.split(":", 1)
-            metadata[key.strip()] = value.strip().strip('"')
-    metadata["tags"] = tags
+            key = key.strip()
+            value = value.strip().strip('"')
+            if key in {"tags", "topics"} and not value:
+                metadata[key] = []
+                list_key = key
+            elif key in {"tags", "topics"}:
+                metadata[key] = [
+                    item.strip().strip('"').strip("'")
+                    for item in value.strip("[]").split(",")
+                    if item.strip()
+                ]
+                list_key = None
+            else:
+                metadata[key] = value
+                list_key = None
+    metadata["topics"] = metadata.get("topics") or metadata.get("tags") or []
+    metadata.setdefault("section", "writing")
     validate_metadata(metadata)
     return metadata, match.group(2).strip()
 
@@ -116,6 +134,8 @@ def render_body(markdown: str) -> str:
     blocks = [line.strip() for line in markdown.splitlines() if line.strip()]
     rendered = []
     for block in blocks:
+        if block.startswith("# "):
+            continue
         image_match = re.fullmatch(r"!\[(.*?)\]\((.*?)\)(?:\{\.half\})?", block)
         if image_match:
             alt, source = image_match.groups()
@@ -231,7 +251,7 @@ def write_share_card(metadata: dict[str, object], cover_image: Path) -> None:
     summary_font = get_chinese_font(25)
     footer_font = get_chinese_font(23)
 
-    draw.text((70, 65), f"{SECTION_NAMES[str(metadata['section'])]}  ·  半棵斋", font=label_font, fill=accent)
+    draw.text((70, 65), f"{SECTION_NAMES[str(metadata.get('section', 'writing'))]}  ·  半棵斋", font=label_font, fill=accent)
     title_lines = wrap_text(draw, str(metadata["title"]), title_font, 630, 3)
     title_y = 132
     for line in title_lines:
@@ -278,7 +298,7 @@ def write_moments_poster(metadata: dict[str, object], cover_image: Path) -> None
     summary_font = get_chinese_font(28)
     hint_font = get_chinese_font(25)
 
-    section = SECTION_NAMES[str(metadata["section"])]
+    section = SECTION_NAMES[str(metadata.get("section", "writing"))]
     date = str(metadata["date"])
     year, month, day = date.split("-")
     draw.text((62, 558), f"{section}  ·  {year}年{int(month)}月{int(day)}日", font=label_font, fill=accent)
@@ -353,7 +373,6 @@ def refresh_share_metadata(metadata: dict[str, object]) -> None:
 
 def write_article(metadata: dict[str, object], markdown: str) -> None:
     slug = str(metadata["slug"])
-    section = str(metadata["section"])
     date = str(metadata["date"])
     year, month, day = date.split("-")
     updated = str(metadata.get("updated", "")).strip()
@@ -367,19 +386,17 @@ def write_article(metadata: dict[str, object], markdown: str) -> None:
             "</time>"
         )
     title = html.escape(str(metadata["title"]))
-    tags = "".join(f"<span># {html.escape(tag)}</span>" for tag in metadata["tags"])
+    topics = "".join(f"<span># {html.escape(topic)}</span>" for topic in metadata["topics"])
     template = (ROOT / "templates/article-page.html").read_text(encoding="utf-8")
     replacements = {
         "{{ARTICLE_SUMMARY}}": html.escape(str(metadata["summary"])),
         "{{ARTICLE_SHARE_METADATA}}": share_metadata(metadata),
         "{{ARTICLE_CANONICAL_URL}}": f"{SITE_URL}articles/{slug}.html",
         "{{ARTICLE_TITLE}}": title,
-        "{{SECTION_ID}}": section,
-        "{{SECTION_NAME}}": SECTION_NAMES[section],
         "{{DATE_ISO}}": date,
         "{{DATE_DISPLAY}}": f"{year}年{int(month)}月{int(day)}日",
         "{{UPDATED_META}}": updated_meta,
-        "{{ARTICLE_TAGS}}": tags,
+        "{{ARTICLE_TOPICS}}": topics,
         "{{ARTICLE_BODY}}": render_body(markdown),
     }
     for key, value in replacements.items():
@@ -398,60 +415,49 @@ def write_article(metadata: dict[str, object], markdown: str) -> None:
     )
 
 
-def update_index(metadata: dict[str, object]) -> None:
-    app_path = ROOT / "app.js"
-    app = app_path.read_text(encoding="utf-8")
+def update_site_data(metadata: dict[str, object], markdown: str) -> None:
+    """Create or refresh one post in the shared Writing data source."""
+    data = SITE_DATA_PATH.read_text(encoding="utf-8")
     slug = str(metadata["slug"])
+    js = lambda value: json.dumps(value, ensure_ascii=False)
+    lines = [
+        "  {",
+        f"    id: {js(slug)},",
+        f"    url: {js(f'/articles/{slug}.html')},",
+    ]
+    if metadata.get("section") in {"essays", "arts"}:
+        lines.append(f"    legacySection: {js(metadata['section'])},")
+    lines.extend(
+        [
+            f"    title: {js(str(metadata['title']))},",
+            f"    excerpt: {js(str(metadata['summary']))},",
+            f"    date: {js(str(metadata['date']))},",
+        ]
+    )
+    updated = str(metadata.get("updated", "")).strip()
+    if updated and updated > str(metadata["date"]):
+        lines.append(f"    updated: {js(updated)},")
+    lines.extend(
+        [
+            f"    topics: {js(metadata['topics'])},",
+            f"    wordCount: {count_written_characters(markdown)},",
+            "  },",
+        ]
+    )
+    entry = "\n".join(lines) + "\n"
     existing_entry = re.search(
         rf'  \{{\n    id: "{re.escape(slug)}",\n.*?\n  \}},\n',
-        app,
+        data,
         re.S,
     )
     if existing_entry:
-        entry = re.sub(r'    updated: "\d{4}-\d{2}-\d{2}",\n', "", existing_entry.group(0))
-        updated = str(metadata.get("updated", "")).strip()
-        if updated and updated > str(metadata["date"]):
-            entry = entry.replace('    tags:', f'    updated: "{updated}",\n    tags:', 1)
-        app_path.write_text(
-            app[: existing_entry.start()] + entry + app[existing_entry.end() :],
+        SITE_DATA_PATH.write_text(
+            data[: existing_entry.start()] + entry + data[existing_entry.end() :],
             encoding="utf-8",
         )
         return
-    tags = ", ".join(f'"{tag}"' for tag in metadata["tags"])
-    entry = f'''  {{
-    id: "{slug}",
-    url: "./articles/{slug}.html",
-    section: "{metadata["section"]}",
-    sectionName: "{SECTION_NAMES[str(metadata["section"])]}",
-    title: "{metadata["title"]}",
-    excerpt: "{metadata["summary"]}",
-    date: "{metadata["date"]}",
-'''
-    if metadata.get("updated") and str(metadata["updated"]) > str(metadata["date"]):
-        entry += f'    updated: "{metadata["updated"]}",\n'
-    entry += '''    tags: [{tags}],
-  },
-'''.replace("{tags}", tags)
-    app_path.write_text(app.replace("const posts = [\n", f"const posts = [\n{entry}", 1), encoding="utf-8")
-
-
-def update_statistics_data(metadata: dict[str, object], markdown: str) -> None:
-    """Add the newly published post's count to the statistics data source."""
-    if not STATISTICS_DATA_PATH.exists():
-        STATISTICS_DATA_PATH.write_text("window.statisticsPosts = [\n];\n", encoding="utf-8")
-    data = STATISTICS_DATA_PATH.read_text(encoding="utf-8")
-    slug = str(metadata["slug"])
-    if f'id: "{slug}"' in data:
-        return
-    entry = (
-        "  {\n"
-        f'    id: "{slug}",\n'
-        f'    date: "{metadata["date"]}",\n'
-        f"    wordCount: {count_written_characters(markdown)},\n"
-        "  },\n"
-    )
-    STATISTICS_DATA_PATH.write_text(
-        data.replace("window.statisticsPosts = [\n", f"window.statisticsPosts = [\n{entry}", 1),
+    SITE_DATA_PATH.write_text(
+        data.replace("window.sitePosts = [\n", f"window.sitePosts = [\n{entry}", 1),
         encoding="utf-8",
     )
 
@@ -465,7 +471,7 @@ def update_rss(metadata: dict[str, object]) -> None:
         return
     import datetime
     published = datetime.date.fromisoformat(str(metadata["date"]))
-    categories = "\n".join(f"      <category>{html.escape(tag)}</category>" for tag in metadata["tags"])
+    categories = "\n".join(f"      <category>{html.escape(topic)}</category>" for topic in metadata["topics"])
     item = f'''    <item>
       <title>{html.escape(str(metadata["title"]))}</title>
       <link>{url}</link>
@@ -495,8 +501,7 @@ def main() -> None:
         refresh_share_metadata(metadata)
         return
     write_article(metadata, markdown)
-    update_index(metadata)
-    update_statistics_data(metadata, markdown)
+    update_site_data(metadata, markdown)
     update_rss(metadata)
 
 

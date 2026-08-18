@@ -17,7 +17,7 @@ from PIL import Image, ImageDraw, ImageFilter, ImageFont, ImageOps
 
 ROOT = Path(__file__).resolve().parents[1]
 SITE_URL = "https://halfatree.page/"
-PUBLIC_ASSET_VERSION = "article-image-selection-v2"
+PUBLIC_ASSET_VERSION = "pages-from-small-room-v3"
 SECTION_NAMES = {"writing": "随笔", "essays": "文章", "arts": "艺文"}
 SECTION_KEYS = {"写作": "writing", "文章": "essays", "艺文": "arts", **{key: key for key in SECTION_NAMES}}
 EDITABLE_METADATA_FIELDS = {
@@ -266,7 +266,7 @@ def write_share_card(metadata: dict[str, object], cover_image: Path) -> None:
         summary_y += 38
 
     draw.text((70, 548), "半棵斋｜Half a Tree", font=footer_font, fill=ink)
-    draw.text((70, 582), "Notes from a small room", font=label_font, fill=muted)
+    draw.text((70, 582), "Pages from a small room", font=label_font, fill=muted)
     card.convert("RGB").save(
         SHARE_IMAGE_DIR / f"{metadata['slug']}.jpg",
         format="JPEG",

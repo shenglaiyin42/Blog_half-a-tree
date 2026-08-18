@@ -1,7 +1,7 @@
 (() => {
   const button = document.querySelector("#site-card-share");
   const status = document.querySelector("#site-card-share-status");
-  const cardUrl = new URL("./card/half-a-tree-site-card.jpg?v=halfatree-page-v1", window.location.href);
+  const cardUrl = new URL("./card/half-a-tree-site-card.jpg?v=pages-from-small-room-v2", window.location.href);
   let cardFilePromise;
 
   const setStatus = (message) => {

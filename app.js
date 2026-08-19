@@ -5,7 +5,7 @@
   const selectedYear = params.get("year");
   const selectedMonth = /^\d{2}$/.test(params.get("month") || "") ? params.get("month") : null;
   const legacySection = ["essays", "arts"].includes(params.get("section")) ? params.get("section") : null;
-  const pageBase = window.location.pathname.startsWith("/now") ? "/now/" : "/";
+  const pageBase = "/";
 
   const topicList = document.querySelector("#topic-list");
   const archiveList = document.querySelector("#archive-list");
@@ -91,7 +91,7 @@
           <h3><a href="${post.url}">${post.title}</a></h3>
           <p class="writing-topics">${post.topics.map((topic) => `<a href="${filterUrl("topic", topic)}">${topic}</a>`).join(" · ")}</p>
         </div>
-      </article>`).join("") : `<p class="empty-state">没有符合条件的随笔。</p>`;
+      </article>`).join("") : `<p class="empty-state">没有符合条件的记录。</p>`;
   }
 
   function renderFilterSummary() {

@@ -12,7 +12,7 @@
 - `文章模板.md`：项目当前唯一的文章模板；所有新文章都从这份文件生成。
 - `发布指南.md`：发布和修改文章的说明。
 - `site-data.js`：Pages、Topics、Archive 与 Statistics 共用的唯一文章数据源，由发布脚本自动更新。
-- `now/`：“现在”页面；显示当前近况，源 Markdown 保存在 `content/posts/`。
+- `now/`：“现在”页面；以时间倒序显示紧凑的近况文章流，源 Markdown 保存在 `content/posts/`。
 - `site-statistics.js`：首页简洁统计所使用的日期与字数计算逻辑。
 
 ## 写作与修改原则

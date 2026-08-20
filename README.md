@@ -13,7 +13,7 @@
 - `发布指南.md`：发布和修改文章的说明。
 - `site-data.js`：Pages、Topics、Archive 与 Statistics 共用的唯一文章数据源，由发布脚本自动更新。
 - `now/`：“现在”页面；以时间倒序显示紧凑的近况文章流，源 Markdown 保存在 `content/posts/`。
-- `site-statistics.js`：首页简洁统计所使用的日期与字数计算逻辑。
+- `site-statistics.js`：首页简洁统计所使用的日期与字数计算逻辑；文章、Now 条目与 About 正文均按独立内容计入，主页列表和话题筛选不重复计数。
 
 ## 写作与修改原则
 

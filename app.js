@@ -111,18 +111,68 @@
     if (element) element.textContent = new Intl.NumberFormat("zh-CN").format(value);
   }
 
-  function renderStatistics() {
+  function countWrittenCharacters(text) {
+    return text.replace(/\s+/g, "").length;
+  }
+
+  async function loadIndependentPageEntries() {
+    const pageEntries = [];
+
+    const [nowResponse, aboutResponse] = await Promise.all([
+      fetch("/now/", { cache: "no-store" }),
+      fetch("/about/", { cache: "no-store" }),
+    ]);
+
+    if (nowResponse.ok) {
+      const nowDocument = new DOMParser().parseFromString(await nowResponse.text(), "text/html");
+      nowDocument.querySelectorAll(".now-entry").forEach((entry, index) => {
+        const body = entry.querySelector(".now-entry-body");
+        const date = entry.querySelector("time[datetime]")?.getAttribute("datetime") || "";
+        if (!body) return;
+        pageEntries.push({
+          id: `now-${date || index}`,
+          date,
+          wordCount: countWrittenCharacters(body.textContent || ""),
+        });
+      });
+    }
+
+    if (aboutResponse.ok) {
+      const aboutDocument = new DOMParser().parseFromString(await aboutResponse.text(), "text/html");
+      const body = aboutDocument.querySelector(".article-body");
+      if (body) {
+        pageEntries.push({
+          id: "about",
+          date: null,
+          wordCount: countWrittenCharacters(body.textContent || ""),
+        });
+      }
+    }
+
+    return pageEntries;
+  }
+
+  function renderStatistics(pageEntries = []) {
     if (!window.siteStatistics) return;
-    const summary = window.siteStatistics.summarize(posts);
+    const summary = window.siteStatistics.summarize([...posts, ...pageEntries]);
     setStatistic("home-week-count", summary.currentWeekCount);
     setStatistic("home-month-count", summary.currentMonthCount);
     setStatistic("home-total-count", summary.totalCount);
     setStatistic("home-total-words", summary.totalWords);
   }
 
+  async function refreshStatistics() {
+    renderStatistics();
+    try {
+      renderStatistics(await loadIndependentPageEntries());
+    } catch (error) {
+      console.warn("无法读取独立页面统计，暂时只显示文章统计。", error);
+    }
+  }
+
   renderTopics();
   renderArchive();
   renderWriting();
   renderFilterSummary();
-  renderStatistics();
+  refreshStatistics();
 })();

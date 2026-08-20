@@ -44,23 +44,24 @@
     return `${year}年${Number(month)}月`;
   }
 
-  function summarize(posts, now = new Date()) {
+  function summarize(entries, now = new Date()) {
     const today = blogToday(now);
     const currentWeekKey = weekStart(today);
     const currentMonthKey = today.slice(0, 7);
-    const currentWeekPosts = posts.filter((post) => weekStart(post.date) === currentWeekKey);
-    const currentMonthPosts = posts.filter((post) => post.date.startsWith(currentMonthKey));
-    const wordTotal = (items) => items.reduce((sum, post) => sum + (post.wordCount || 0), 0);
+    const datedEntries = entries.filter((entry) => /^\d{4}-\d{2}-\d{2}$/.test(entry.date || ""));
+    const currentWeekEntries = datedEntries.filter((entry) => weekStart(entry.date) === currentWeekKey);
+    const currentMonthEntries = datedEntries.filter((entry) => entry.date.startsWith(currentMonthKey));
+    const wordTotal = (items) => items.reduce((sum, entry) => sum + (entry.wordCount || 0), 0);
 
     return {
       currentWeekKey,
       currentMonthKey,
-      currentWeekCount: currentWeekPosts.length,
-      currentWeekWords: wordTotal(currentWeekPosts),
-      currentMonthCount: currentMonthPosts.length,
-      currentMonthWords: wordTotal(currentMonthPosts),
-      totalCount: posts.length,
-      totalWords: wordTotal(posts),
+      currentWeekCount: currentWeekEntries.length,
+      currentWeekWords: wordTotal(currentWeekEntries),
+      currentMonthCount: currentMonthEntries.length,
+      currentMonthWords: wordTotal(currentMonthEntries),
+      totalCount: entries.length,
+      totalWords: wordTotal(entries),
     };
   }
 

@@ -133,23 +133,35 @@ def read_post(path: Path) -> tuple[dict[str, object], str]:
 def render_body(markdown: str) -> str:
     blocks = [line.strip() for line in markdown.splitlines() if line.strip()]
     rendered = []
-    for block in blocks:
+    index = 0
+    while index < len(blocks):
+        block = blocks[index]
         if block.startswith("# "):
+            index += 1
             continue
         image_match = re.fullmatch(r"!\[(.*?)\]\((.*?)\)(?:\{\.half\})?", block)
         if image_match:
             alt, source = image_match.groups()
             figure_class = "article-image article-image-half" if block.endswith("{.half}") else "article-image"
+            caption = ""
+            if index + 1 < len(blocks) and blocks[index + 1].startswith("图片来源："):
+                caption = (
+                    f'<figcaption class="article-image-credit">'
+                    f'{html.escape(blocks[index + 1])}</figcaption>'
+                )
+                index += 1
             rendered.append(
                 f'<figure class="{figure_class}">'
                 f'<img src="{html.escape(source, quote=True)}" '
                 f'alt="{html.escape(alt, quote=True)}" loading="lazy" />'
+                f"{caption}"
                 "</figure>"
             )
         elif block.startswith("**") and block.endswith("**"):
             rendered.append(f"<p><strong>{html.escape(block[2:-2])}</strong></p>")
         else:
             rendered.append(f"<p>{html.escape(block)}</p>")
+        index += 1
     return "\n          ".join(rendered)
 
 

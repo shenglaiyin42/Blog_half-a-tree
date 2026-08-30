@@ -1,5 +1,14 @@
 window.sitePosts = [
   {
+    id: "we-all-live-downstream",
+    url: "/articles/we-all-live-downstream.html",
+    title: "我们每个人都生活在下游",
+    excerpt: "在同一场气候变化里，我们每个人都生活在下游。",
+    date: "2026-08-30",
+    topics: ["随想"],
+    wordCount: 572,
+  },
+  {
     id: "in-the-face-of-geological-time",
     url: "/articles/in-the-face-of-geological-time.html",
     legacySection: "essays",

@@ -1,5 +1,14 @@
 window.sitePosts = [
   {
+    id: "knowing-what-you-do-not-know",
+    url: "/articles/knowing-what-you-do-not-know.html",
+    title: "不知为不知",
+    excerpt: "一个人到了一定年纪、有了一定地位之后，往往更难坦然承认自己不知道。可你是不是知道、是不是在胡扯，别人其实很容易听出来。与其用所谓的“大的图景”掩饰自己的局限，不如卸下伪装，对自己诚实，对他人诚实。",
+    date: "2026-08-31",
+    topics: ["随想"],
+    wordCount: 576,
+  },
+  {
     id: "we-all-live-downstream",
     url: "/articles/we-all-live-downstream.html",
     title: "我们每个人都生活在下游",

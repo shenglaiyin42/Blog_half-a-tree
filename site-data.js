@@ -1,5 +1,14 @@
 window.sitePosts = [
   {
+    id: "vegetarian-ultramarathon-runner-nutrition-fat-loss-plan",
+    url: "/articles/vegetarian-ultramarathon-runner-nutrition-fat-loss-plan.html",
+    title: "素食（超级）马拉松跑者饮食与减脂方案",
+    excerpt: "一份根据个人身体状况、素食习惯和马拉松训练安排制定的饮食与减脂方案，涵盖训练日能量分配、蛋白质来源、主食与三餐选择、饮料和电解质，以及如何在不损害训练质量与恢复的情况下逐步降低体脂。",
+    date: "2026-09-01",
+    topics: ["健身"],
+    wordCount: 11867,
+  },
+  {
     id: "knowing-what-you-do-not-know",
     url: "/articles/knowing-what-you-do-not-know.html",
     title: "不知为不知",

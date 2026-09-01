@@ -130,12 +130,79 @@ def read_post(path: Path) -> tuple[dict[str, object], str]:
     return parsed
 
 
+INLINE_PATTERN = re.compile(
+    r"(`[^`]+`|\*\*.+?\*\*|\[[^\]]+\]\([^)]+\)|\*[^*]+\*)"
+)
+
+
+def render_inline(markdown: str) -> str:
+    """Render the small inline-Markdown subset used by blog articles."""
+    rendered: list[str] = []
+    cursor = 0
+    for match in INLINE_PATTERN.finditer(markdown):
+        rendered.append(html.escape(markdown[cursor : match.start()]))
+        token = match.group(0)
+        link_match = re.fullmatch(r"\[([^\]]+)\]\(([^)]+)\)", token)
+        if token.startswith("**"):
+            rendered.append(f"<strong>{html.escape(token[2:-2])}</strong>")
+        elif token.startswith("`"):
+            rendered.append(f"<code>{html.escape(token[1:-1])}</code>")
+        elif link_match:
+            label, target = link_match.groups()
+            safe_target = target if target.startswith(("https://", "http://", "/", "#")) else "#"
+            external = ' target="_blank" rel="noopener"' if safe_target.startswith("http") else ""
+            rendered.append(
+                f'<a href="{html.escape(safe_target, quote=True)}"{external}>'
+                f"{html.escape(label)}</a>"
+            )
+        else:
+            rendered.append(f"<em>{html.escape(token[1:-1])}</em>")
+        cursor = match.end()
+    rendered.append(html.escape(markdown[cursor:]))
+    return "".join(rendered)
+
+
+def split_table_row(line: str) -> list[str]:
+    return [cell.strip() for cell in line.strip().strip("|").split("|")]
+
+
+def is_table_separator(line: str) -> bool:
+    cells = split_table_row(line)
+    return bool(cells) and all(re.fullmatch(r":?-{3,}:?", cell) for cell in cells)
+
+
 def render_body(markdown: str) -> str:
-    blocks = [line.strip() for line in markdown.splitlines() if line.strip()]
-    rendered = []
+    lines = [line.rstrip() for line in markdown.splitlines()]
+    rendered: list[str] = []
+    section_ids: dict[int, str] = {}
+    toc_entries: list[tuple[str, str]] = []
+    section_number = 0
+    for line_index, line in enumerate(lines):
+        heading_match = re.fullmatch(r"##\s+(.+)", line.strip())
+        if heading_match:
+            section_number += 1
+            section_id = f"section-{section_number}"
+            section_ids[line_index] = section_id
+            toc_entries.append((section_id, heading_match.group(1)))
+
     index = 0
-    while index < len(blocks):
-        block = blocks[index]
+    while index < len(lines):
+        block = lines[index].strip()
+        if not block:
+            index += 1
+            continue
+        if block == "[[TOC]]":
+            items = "".join(
+                f'<li><a href="#{section_id}">{render_inline(title)}</a></li>'
+                for section_id, title in toc_entries
+            )
+            rendered.append(
+                '<nav class="article-toc" aria-label="文章目录">'
+                '<p class="article-toc-title">目录 <span>/ Contents</span></p>'
+                f"<ol>{items}</ol></nav>"
+            )
+            index += 1
+            continue
         if block.startswith("# "):
             index += 1
             continue
@@ -144,10 +211,10 @@ def render_body(markdown: str) -> str:
             alt, source = image_match.groups()
             figure_class = "article-image article-image-half" if block.endswith("{.half}") else "article-image"
             caption = ""
-            if index + 1 < len(blocks) and blocks[index + 1].startswith("图片来源："):
+            if index + 1 < len(lines) and lines[index + 1].strip().startswith("图片来源："):
                 caption = (
                     f'<figcaption class="article-image-credit">'
-                    f'{html.escape(blocks[index + 1])}</figcaption>'
+                    f'{html.escape(lines[index + 1].strip())}</figcaption>'
                 )
                 index += 1
             rendered.append(
@@ -157,10 +224,78 @@ def render_body(markdown: str) -> str:
                 f"{caption}"
                 "</figure>"
             )
-        elif block.startswith("**") and block.endswith("**"):
-            rendered.append(f"<p><strong>{html.escape(block[2:-2])}</strong></p>")
+        elif block.startswith("|") and index + 1 < len(lines) and is_table_separator(lines[index + 1].strip()):
+            header = split_table_row(block)
+            alignment = split_table_row(lines[index + 1].strip())
+            rows: list[list[str]] = []
+            index += 2
+            while index < len(lines) and lines[index].strip().startswith("|"):
+                rows.append(split_table_row(lines[index].strip()))
+                index += 1
+            column_count = len(header)
+            table_class = "article-table is-wide" if column_count > 3 else "article-table"
+            header_html = "".join(
+                f'<th style="text-align:{"center" if cell.startswith(":") and cell.endswith(":") else "right" if cell.endswith(":") else "left"}">'
+                f"{render_inline(value)}</th>"
+                for value, cell in zip(header, alignment)
+            )
+            body_html = "".join(
+                "<tr>"
+                + "".join(
+                    f"<td>{render_inline(row[cell_index]) if cell_index < len(row) else ''}</td>"
+                    for cell_index in range(column_count)
+                )
+                + "</tr>"
+                for row in rows
+            )
+            rendered.append(
+                f'<div class="article-table-wrap"><table class="{table_class}">'
+                f"<thead><tr>{header_html}</tr></thead><tbody>{body_html}</tbody>"
+                "</table></div>"
+            )
+            continue
+        elif block == "---":
+            rendered.append('<hr class="article-divider" />')
+        elif heading_match := re.fullmatch(r"(#{2,4})\s+(.+)", block):
+            level = len(heading_match.group(1))
+            title = heading_match.group(2)
+            section_id = section_ids.get(index, "")
+            id_attribute = f' id="{section_id}"' if section_id else ""
+            rendered.append(f"<h{level}{id_attribute}>{render_inline(title)}</h{level}>")
+        elif block.startswith("> "):
+            quote = block[2:].strip()
+            if quote.startswith("EN｜"):
+                rendered.append(
+                    f'<p class="article-translation" lang="en">{render_inline(quote[3:].strip())}</p>'
+                )
+            elif quote.startswith("说明｜"):
+                rendered.append(
+                    '<aside class="article-note"><strong>说明</strong>'
+                    f"<p>{render_inline(quote[3:].strip())}</p></aside>"
+                )
+            elif quote.startswith("下载｜"):
+                rendered.append(
+                    '<aside class="article-download"><span>可下载版本</span>'
+                    f"{render_inline(quote[3:].strip())}</aside>"
+                )
+            else:
+                rendered.append(f"<blockquote><p>{render_inline(quote)}</p></blockquote>")
+        elif re.match(r"^[-*]\s+", block):
+            items: list[str] = []
+            while index < len(lines) and re.match(r"^[-*]\s+", lines[index].strip()):
+                items.append(re.sub(r"^[-*]\s+", "", lines[index].strip()))
+                index += 1
+            rendered.append("<ul>" + "".join(f"<li>{render_inline(item)}</li>" for item in items) + "</ul>")
+            continue
+        elif re.match(r"^\d+\.\s+", block):
+            items = []
+            while index < len(lines) and re.match(r"^\d+\.\s+", lines[index].strip()):
+                items.append(re.sub(r"^\d+\.\s+", "", lines[index].strip()))
+                index += 1
+            rendered.append("<ol>" + "".join(f"<li>{render_inline(item)}</li>" for item in items) + "</ol>")
+            continue
         else:
-            rendered.append(f"<p>{html.escape(block)}</p>")
+            rendered.append(f"<p>{render_inline(block)}</p>")
         index += 1
     return "\n          ".join(rendered)
 
@@ -247,6 +382,14 @@ def share_image_url(metadata: dict[str, object]) -> str:
     return f"{SITE_URL}public/media/share/{metadata['slug']}.jpg?v={PUBLIC_ASSET_VERSION}"
 
 
+def article_label(metadata: dict[str, object]) -> str:
+    """Use the article's first topic on share images, with legacy section fallback."""
+    topics = metadata.get("topics") or []
+    if topics:
+        return str(topics[0])
+    return SECTION_NAMES[str(metadata.get("section", "writing"))]
+
+
 def write_share_card(metadata: dict[str, object], cover_image: Path) -> None:
     """Create a standard 1200 × 630 social-preview JPEG for one article."""
     SHARE_IMAGE_DIR.mkdir(parents=True, exist_ok=True)
@@ -263,7 +406,7 @@ def write_share_card(metadata: dict[str, object], cover_image: Path) -> None:
     summary_font = get_chinese_font(25)
     footer_font = get_chinese_font(23)
 
-    draw.text((70, 65), f"{SECTION_NAMES[str(metadata.get('section', 'writing'))]}  ·  半棵斋", font=label_font, fill=accent)
+    draw.text((70, 65), f"{article_label(metadata)}  ·  半棵斋", font=label_font, fill=accent)
     title_lines = wrap_text(draw, str(metadata["title"]), title_font, 630, 3)
     title_y = 132
     for line in title_lines:
@@ -310,7 +453,7 @@ def write_moments_poster(metadata: dict[str, object], cover_image: Path) -> None
     summary_font = get_chinese_font(28)
     hint_font = get_chinese_font(25)
 
-    section = SECTION_NAMES[str(metadata.get("section", "writing"))]
+    section = article_label(metadata)
     date = str(metadata["date"])
     year, month, day = date.split("-")
     draw.text((62, 558), f"{section}  ·  {year}年{int(month)}月{int(day)}日", font=label_font, fill=accent)

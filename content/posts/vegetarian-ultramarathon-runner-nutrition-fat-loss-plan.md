@@ -11,7 +11,7 @@
 **素食耐力跑者的健康改善、体脂管理与马拉松训练营养方案**
 > EN｜**A Health, Body-Composition, and Marathon Nutrition Plan for a Vegetarian Endurance Runner**
 > 说明｜本文是根据我目前的身体状况、素食习惯和马拉松训练安排制定的个人执行方案，仅作个人记录与经验分享，不构成医疗诊断或个性化营养建议。如果出现持续疲劳、恢复变差、睡眠异常、反复伤病或其他健康问题，应停止减脂并咨询医生或注册营养师。
-> 下载｜[下载 PDF 版本（GitHub）](https://github.com/shenglaiyin42/Blog_half-a-tree/raw/refs/heads/main/public/downloads/vegetarian-ultramarathon-runner-nutrition-fat-loss-plan.pdf)
+> 下载｜[下载 PDF 版本](https://github.com/shenglaiyin42/Blog_half-a-tree/raw/refs/heads/main/public/downloads/vegetarian-ultramarathon-runner-nutrition-fat-loss-plan.pdf)
 [[TOC]]
 ---
 ## 当前身体状况与目标

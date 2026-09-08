@@ -1,5 +1,14 @@
 window.sitePosts = [
   {
+    id: "crying-in-h-mart",
+    url: "/articles/crying-in-h-mart.html",
+    title: "《没有妈妈的超市》（Crying in H Mart）",
+    excerpt: "它当然是在写母亲，也是在写死亡和失去，但同时，它又在写我们怎样理解父母，怎样理解自己，怎样理解自己从哪里来，以及怎样面对那些可能永远无法彻底解决的关系。",
+    date: "2026-09-08",
+    topics: ["读书"],
+    wordCount: 4103,
+  },
+  {
     id: "vegetarian-ultramarathon-runner-nutrition-fat-loss-plan",
     url: "/articles/vegetarian-ultramarathon-runner-nutrition-fat-loss-plan.html",
     title: "素食（超级）马拉松跑者饮食与减脂方案",

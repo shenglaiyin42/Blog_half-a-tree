@@ -1,5 +1,14 @@
 window.sitePosts = [
   {
+    id: "fan-ren-xiu-xian-zhuan-review",
+    url: "/articles/fan-ren-xiu-xian-zhuan-review.html",
+    title: "我终于吃完了《凡人修仙传》这份大碗臭豆腐",
+    excerpt: "断断续续刷了一年半到两年，终于看完《凡人修仙传》。一边嫌弃它的人物、情节和语言，一边又忍不住继续，最后觉得，它更像一份需要大幅删减的仙侠 RPG 剧本。这碗大号的臭豆腐，终究还是吃完了。",
+    date: "2026-10-18",
+    topics: ["读书"],
+    wordCount: 5548,
+  },
+  {
     id: "crying-in-h-mart",
     url: "/articles/crying-in-h-mart.html",
     title: "《没有妈妈的超市》（Crying in H Mart）",

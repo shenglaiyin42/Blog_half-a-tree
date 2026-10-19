@@ -1,5 +1,14 @@
 window.sitePosts = [
   {
+    id: "yue-nu-jian-review",
+    url: "/articles/yue-nu-jian-review.html",
+    title: "从《凡人修仙传》到《越女剑》：赶紧吃点好的",
+    excerpt: "读《凡人修仙传》的体验还很鲜明（吐槽都在上一篇文章当中），接着读了金庸先生一篇很短的《越女剑》，反差实在太大。历史、计谋、人物关系和奇幻，几段故事就写得有声有色，有些细节读完之后还会回头琢磨。金庸先生真是太会写了。",
+    date: "2026-10-19",
+    topics: ["读书"],
+    wordCount: 2810,
+  },
+  {
     id: "fan-ren-xiu-xian-zhuan-review",
     url: "/articles/fan-ren-xiu-xian-zhuan-review.html",
     title: "我终于吃完了《凡人修仙传》这份大碗臭豆腐",

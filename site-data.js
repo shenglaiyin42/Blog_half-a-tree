@@ -1,5 +1,14 @@
 window.sitePosts = [
   {
+    id: "tianlongbabu-review",
+    url: "/articles/tianlongbabu-review.html",
+    title: "《天龙八部》：每个人都是自己困境的奴隶",
+    excerpt: "少年时读《天龙八部》，在意的是谁的武功更高、奇遇更多、最受女孩子欢迎。人到中年再读，更在意的却是他们的人生困局：一个人怎样被自己的经历、观念和性格所限制，又需要什么样的机缘，才能走出来。",
+    date: "2026-10-22",
+    topics: ["读书"],
+    wordCount: 4865,
+  },
+  {
     id: "yue-nu-jian-review",
     url: "/articles/yue-nu-jian-review.html",
     title: "《越女剑》：比剑法更精彩的，是人心",

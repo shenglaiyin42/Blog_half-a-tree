@@ -295,7 +295,10 @@ def render_body(markdown: str) -> str:
             rendered.append("<ol>" + "".join(f"<li>{render_inline(item)}</li>" for item in items) + "</ol>")
             continue
         else:
-            rendered.append(f"<p>{render_inline(block)}</p>")
+            if block.startswith("&emsp;&emsp;"):
+                rendered.append(f'<p class="paragraph-indent">{render_inline(block[len("&emsp;&emsp;"):])}</p>')
+            else:
+                rendered.append(f"<p>{render_inline(block)}</p>")
         index += 1
     return "\n          ".join(rendered)
 
@@ -360,7 +363,7 @@ def article_cover_image(markdown: str, metadata: dict[str, object]) -> Path:
 
 def count_written_characters(markdown: str) -> int:
     """Count written characters, excluding whitespace and Markdown image/link syntax."""
-    text = re.sub(r"!\[[^\]]*\]\([^)]*\)", "", markdown)
+    text = re.sub(r"!\[[^\]]*\]\([^)]*\)", "", markdown.replace("&emsp;", ""))
     text = re.sub(r"\[([^\]]+)\]\([^)]*\)", r"\1", text)
     text = re.sub(r"[*_#>`~-]", "", text)
     return len(re.sub(r"\s+", "", text))

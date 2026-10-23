@@ -243,6 +243,7 @@ h1 em { font-family: var(--english-font); font-weight: 500; letter-spacing: .01e
 .article-tags span { color: var(--moss); font: var(--tag-size)/var(--normal-leading) var(--english-font); }
 .article-body { padding-top: 30px; color: #383c37; font-size: var(--body-size); line-height: var(--normal-leading); }
 .article-body p { margin-bottom: 1.25em; }
+.article-body p.paragraph-indent { text-indent: 2em; }
 .article-image { margin: 1.8em 0; }
 .article-image img { display: block; width: 100%; height: auto; border-radius: 10px; }
 .article-image-half { width: 50%; margin-right: auto; margin-left: auto; }

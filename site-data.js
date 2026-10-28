@@ -1,5 +1,14 @@
 window.sitePosts = [
   {
+    id: "murong-fu",
+    url: "/articles/murong-fu.html",
+    title: "金庸对表哥不够好",
+    excerpt: "金庸对慕容复实在不太好。或者说，慕容复这个人，真是太苦了。人还没出场，先把他抬得很高。一句“北乔峰，南慕容”，一下子抬高到了全书武力值最高的两个人之一。与此同时，又给他安排了复兴大燕的历史重任。人还没见着，名声和责任就已经摆在那里了。",
+    date: "2026-10-27",
+    topics: ["读书"],
+    wordCount: 975,
+  },
+  {
     id: "tianlongbabu-review",
     url: "/articles/tianlongbabu-review.html",
     title: "《天龙八部》：每个人都是自己困境的奴隶",

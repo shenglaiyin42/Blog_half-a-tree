@@ -1,6 +1,6 @@
 <!-- BLOG_METADATA_START -->
 ## 文章信息（可以直接修改，发布时不会显示）
-标题：“中观”理发店的鬼故事
+标题：“中道”理发店的鬼故事
 网址名：midway-barber-shop-ghost-stories
 首次发表：2026-11-03
 更新于：
@@ -9,7 +9,7 @@
 话题：随笔
 <!-- BLOG_METADATA_END -->
 
-&emsp;&emsp;我在美国中部 Oklahoma 的 Norman 这个小镇住了几年，主要在 University of Oklahoma 工作。这几年理发，几乎每次都是去主街上的一家店，叫 Midway Barber Shop。一开始选这家店，主要是因为名字比较合我的喜好，因为它的店名可以翻译成叫“中观理发店”。当然，这家店跟中观完全没有关系。按我听来的说法，这里的 Midway 指的是早年主街中间那一带。所以 Norman 除了 Midway Barber Shop，还有 Midway Grocery Store 等等。
+&emsp;&emsp;我在美国中部 Oklahoma 的 Norman 这个小镇住了几年，主要在 University of Oklahoma 工作。这几年理发，几乎每次都是去主街上的一家店，叫 Midway Barber Shop。一开始选这家店，主要是因为名字比较合我的喜好，因为它的店名可以翻译成叫“中道理发店”。当然，这家店跟中道完全没有关系。按我听来的说法，这里的 Midway 指的是早年主街中间那一带。所以 Norman 除了 Midway Barber Shop，还有 Midway Grocery Store 等等。
 
 &emsp;&emsp;去得多了以后我才听说，这家理发店最早开于 1890s，算下来已经有一百多年了。这一百多年里，店主换了不少，只是店一直开在同一个地方。
 

@@ -2,7 +2,7 @@ window.sitePosts = [
   {
     id: "midway-barber-shop-ghost-stories",
     url: "/articles/midway-barber-shop-ghost-stories.html",
-    title: "“中观”理发店的鬼故事",
+    title: "“中道”理发店的鬼故事",
     excerpt: "我在美国中部 Oklahoma 的 Norman 这个小镇住了几年，主要在 University of Oklahoma 工作。这几年理发，几乎每次都是去主街上的一家店，叫 Midway Barber Shop。",
     date: "2026-11-03",
     topics: ["随笔"],

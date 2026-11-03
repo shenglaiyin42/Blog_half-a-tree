@@ -1,5 +1,14 @@
 window.sitePosts = [
   {
+    id: "midway-barber-shop-ghost-stories",
+    url: "/articles/midway-barber-shop-ghost-stories.html",
+    title: "“中观”理发店的鬼故事",
+    excerpt: "我在美国中部 Oklahoma 的 Norman 这个小镇住了几年，主要在 University of Oklahoma 工作。这几年理发，几乎每次都是去主街上的一家店，叫 Midway Barber Shop。",
+    date: "2026-11-03",
+    topics: ["随笔"],
+    wordCount: 1471,
+  },
+  {
     id: "murong-fu",
     url: "/articles/murong-fu.html",
     title: "金庸对表哥太也不好",
@@ -59,7 +68,7 @@ window.sitePosts = [
     title: "不知为不知",
     excerpt: "一个人到了一定年纪、有了一定地位之后，往往更难坦然承认自己不知道。可你是不是知道、是不是在胡扯，别人其实很容易听出来。与其用所谓的“大的图景”掩饰自己的局限，不如卸下伪装，对自己诚实，对他人诚实。",
     date: "2026-08-31",
-    topics: ["随想"],
+    topics: ["随笔"],
     wordCount: 576,
   },
   {
@@ -68,7 +77,7 @@ window.sitePosts = [
     title: "我们每个人都生活在下游",
     excerpt: "在同一场气候变化里，我们每个人都生活在下游。",
     date: "2026-08-30",
-    topics: ["随想"],
+    topics: ["随笔"],
     wordCount: 576,
   },
   {
@@ -78,7 +87,7 @@ window.sitePosts = [
     title: "在百万年的时间面前",
     excerpt: "我们眼前看到的地质现象，动辄以百万年为时间单位；人的一生最多不过百年，而许多烦恼甚至只持续几小时。这跟大自然比起来，真的不值一提。",
     date: "2026-08-16",
-    topics: ["随想"],
+    topics: ["随笔"],
     wordCount: 262,
   },
   {
